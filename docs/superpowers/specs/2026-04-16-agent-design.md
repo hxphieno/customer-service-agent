@@ -283,7 +283,7 @@ Hybrid Search 参数：
 
 四项检查（任一失败即触发重试）：
 
-1. **子问题覆盖**：对每个 `sub_question`，检查 `draft_answer` 中是否包含其关键词（jieba 分词后取名词/动词匹配，避免纯字符串对比的假阴性）
+1. **子问题覆盖**：对每个 `sub_question`，用一次轻量 Claude 调用判断 `draft_answer` 是否已回应该子问题（返回 `true/false`，单次调用批量判断所有子问题，控制额外成本）
 2. **图片存在性**：`used_images` 中每个 ID，检查 `手册/插图/{id}.png` 文件是否存在
 3. **PIC 数量对齐**：`draft_answer.count("<PIC>") == len(used_images)`
 4. **答案溯源**：从 `draft_answer` 中提取数字、产品型号（正则：`\d+[.\d]*\s*(℃|小时|分钟|kg|W|V|mm|cm)`等），检查每条是否出现在 `retrieved_chunks` 原文中
@@ -393,7 +393,7 @@ Content-Type: application/json
 | 父子 Chunk | 子 chunk 检索 + 父 chunk 生成 | 检索精度与生成上下文完整性两全 |
 | 图片传给 Claude 上限 5 张 | AnswerGenerator 内部截断 | 避免 token 超限，优先传高频出现的图片 |
 | 最多 2 次重试 | Validator 控制 | 防止无限回环，保证 batch 运行可预期耗时 |
-| Validator 使用 jieba 分词 | 子问题覆盖检查 | 纯字符串匹配对中文多假阴性，分词后取实词匹配更准确 |
+| Validator 子问题覆盖用 Claude 判断 | 轻量单次调用批量判断 | 中文语义理解远优于分词匹配，避免假阴性触发不必要重试 |
 
 ---
 
@@ -406,7 +406,6 @@ langgraph
 langchain-anthropic
 qdrant-client
 fastembed                  # bge-m3 dense + sparse BM25
-jieba                      # 中文分词（Validator 子问题覆盖检查）
 fastapi
 uvicorn
 pandas
