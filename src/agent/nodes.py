@@ -119,11 +119,19 @@ def fallback_responder_node(state: AgentState) -> dict:
 
 def answer_generator_node(state: AgentState) -> dict:
     """基于检索结果生成答案，支持多模态输出。"""
+    from collections import Counter
+
     chunks = state["retrieved_chunks"]
-    candidate_images = state.get("candidate_images", [])
     sub_questions = state["sub_questions"]
 
-    # 构建上下文
+    # 1. 图片频次统计 + Top 5
+    all_images = []
+    for c in chunks:
+        all_images.extend(c.get("image_ids", []))
+    freq = Counter(all_images)
+    top_images = [img for img, _ in freq.most_common(MAX_IMAGES_PER_ANSWER)]
+
+    # 2. 构建上下文
     context_parts = []
     for i, c in enumerate(chunks, 1):
         text = c.get("text", "")
@@ -132,28 +140,45 @@ def answer_generator_node(state: AgentState) -> dict:
         context_parts.append(f"[{i}] {chapter}\n{text}\n关联图片: {imgs}")
     context = "\n\n".join(context_parts)
 
-    system = f"""你是产品客服助手。基于以下检索到的手册内容回答用户问题。
-
-检索上下文：
-{context}
-
-候选图片ID（最多选{MAX_IMAGES_PER_ANSWER}张）：
-{candidate_images}
+    system = """你是产品客服助手。基于提供的手册内容和配图回答用户问题。
 
 要求：
 1. 回答准确、完整，覆盖所有子问题
 2. 若需配图，在文本中用 <PIC> 标记插入位置
-3. 返回JSON格式（不要加markdown代码块）：
-{{
+3. 从提供的图片中选择最相关的（已按相关度排序）
+4. 返回JSON格式（不要加markdown代码块）：
+{
   "answer": "回答文本，用<PIC>标记图片位置",
   "image_ids": ["选中的图片ID列表，按<PIC>顺序"]
-}}
-4. 不要编造信息，仅基于检索内容作答"""
+}
+5. image_ids列表中的ID数量必须与answer中<PIC>数量完全一致
+6. 不要编造信息，仅基于检索内容作答"""
 
-    user_msg = "用户问题：\n" + "\n".join(f"- {q}" for q in sub_questions)
-    messages = [SystemMessage(content=system), HumanMessage(content=user_msg)]
+    user_text = f"""用户问题：
+{chr(10).join(f"- {q}" for q in sub_questions)}
 
+检索上下文：
+{context}"""
+
+    # 3. 构建多模态消息
+    content = [{"type": "text", "text": user_text}]
+    for img_id in top_images:
+        img_path = IMAGES_DIR / f"{img_id}.png"
+        if img_path.exists():
+            img_b64 = base64.b64encode(img_path.read_bytes()).decode()
+            content.append({
+                "type": "image",
+                "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": img_b64,
+                }
+            })
+            content.append({"type": "text", "text": f"[图片ID: {img_id}]"})
+
+    messages = [SystemMessage(content=system), HumanMessage(content=content)]
     response = llm.invoke(messages)
+
     try:
         parsed = json.loads(response.content)
         answer = parsed.get("answer", "")
