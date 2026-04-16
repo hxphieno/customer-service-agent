@@ -19,7 +19,8 @@ def get_qdrant_client() -> QdrantClient:
 
 
 def get_dense_model() -> TextEmbedding:
-    return TextEmbedding("BAAI/bge-m3")
+    # Use multilingual model that supports Chinese
+    return TextEmbedding("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 
 def get_sparse_model() -> SparseTextEmbedding:
@@ -31,7 +32,7 @@ def setup_manuals_collection(client: QdrantClient) -> None:
         client.delete_collection(MANUALS_COLLECTION)
     client.create_collection(
         collection_name=MANUALS_COLLECTION,
-        vectors_config={"dense": VectorParams(size=1024, distance=Distance.COSINE)},
+        vectors_config={"dense": VectorParams(size=384, distance=Distance.COSINE)},
         sparse_vectors_config={
             "sparse": SparseVectorParams(index=SparseIndexParams(on_disk=False))
         },
@@ -43,7 +44,7 @@ def setup_policy_collection(client: QdrantClient) -> None:
         client.delete_collection(POLICY_COLLECTION)
     client.create_collection(
         collection_name=POLICY_COLLECTION,
-        vectors_config=VectorParams(size=1024, distance=Distance.COSINE),
+        vectors_config=VectorParams(size=384, distance=Distance.COSINE),
     )
 
 

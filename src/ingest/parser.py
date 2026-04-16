@@ -14,7 +14,28 @@ def parse_manual(filepath: Path) -> dict:
     解析单本手册 .txt 文件（格式：[text, [image_ids]]）。
     Returns dict with keys: product, text, image_ids, pic_count, pic_position_map, filepath
     """
+    import re
     raw = filepath.read_text(encoding="utf-8").strip()
+    # Fix invalid escape sequences in the JSON files
+    # Strategy: Match backslash followed by invalid escape char, and double it
+    # But we need to handle both \X and \\X patterns
+    # First, protect valid escapes by temporarily replacing them
+    # Then fix all remaining backslashes, then restore valid escapes
+
+    # Simpler approach: just replace all backslashes with double backslashes,
+    # then fix the over-escaped valid ones
+    raw = raw.replace('\\', '\\\\')
+    # Now fix over-escaped valid escapes: \\\\" -> \\", \\\\\\\\ -> \\\\, etc.
+    raw = raw.replace('\\\\\\\\', '\\\\')  # \\\\ -> \\
+    raw = raw.replace('\\\\"', '\\"')      # \\" -> \"
+    raw = raw.replace('\\\\/', '\\/')      # \\/ -> \/
+    raw = raw.replace('\\\\b', '\\b')      # \\b -> \b
+    raw = raw.replace('\\\\f', '\\f')      # \\f -> \f
+    raw = raw.replace('\\\\n', '\\n')      # \\n -> \n
+    raw = raw.replace('\\\\r', '\\r')      # \\r -> \r
+    raw = raw.replace('\\\\t', '\\t')      # \\t -> \t
+    raw = raw.replace('\\\\u', '\\u')      # \\u -> \u
+
     try:
         data = json.loads(raw)
         text: str = data[0]
@@ -37,4 +58,8 @@ def parse_manual(filepath: Path) -> dict:
 
 def parse_all_manuals(manuals_dir: Path) -> list[dict]:
     """解析目录下所有 *手册.txt 文件"""
-    return [parse_manual(f) for f in sorted(manuals_dir.glob("*手册.txt")) if f.is_file()]
+    return [
+        parse_manual(f)
+        for f in sorted(manuals_dir.glob("*手册.txt"))
+        if f.is_file() and "汇总" not in f.name
+    ]
