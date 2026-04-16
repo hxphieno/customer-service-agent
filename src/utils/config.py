@@ -5,14 +5,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-ANTHROPIC_API_KEY: str = os.environ["ANTHROPIC_API_KEY"]
+ANTHROPIC_API_KEY: str = os.environ.get("ANTHROPIC_API_KEY", "")
+if not ANTHROPIC_API_KEY:
+    raise ValueError("ANTHROPIC_API_KEY environment variable is required. Please set it in .env file.")
 KAFU_API_TOKEN: str = os.getenv("KAFU_API_TOKEN", "dev-token")
 
 QDRANT_PATH: str = os.getenv("QDRANT_PATH", "./knowledge_base/qdrant_data")
 MANUALS_DIR: Path = Path(os.getenv("MANUALS_DIR", "./手册"))
 IMAGES_DIR: Path = Path(os.getenv("IMAGES_DIR", "./手册/插图"))
 DOCSTORE_PATH: Path = Path(os.getenv("DOCSTORE_PATH", "./knowledge_base/docstore.json"))
-POLICY_DIR: Path = Path("./knowledge_base/policy")
+POLICY_DIR: Path = Path(os.getenv("POLICY_DIR", "./knowledge_base/policy"))
 
 MANUALS_COLLECTION = "manuals"
 POLICY_COLLECTION = "policy"

@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+*.so
+.Python
+.DS_Store
+*.egg-info/
+knowledge_base/qdrant_data/
+knowledge_base/docstore.json
+submission_*.csv
+.superpowers/
