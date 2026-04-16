@@ -1,0 +1,163 @@
+<h2>最终完整架构——含 4 项优化</h2>
+<p class="subtitle">这是我们将要实现的完整设计，请确认后进入文档编写</p>
+
+<style>
+.two-col { display: flex; gap: 1.5rem; margin-top: 1rem; }
+.col { flex: 1; }
+.section-title {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 0.6rem; padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--accent);
+}
+.node {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+}
+.node .t { font-weight: 600; }
+.node .s { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
+.node.decision { border-color: #f59e0b; background: color-mix(in srgb,#f59e0b 7%,var(--surface)); }
+.node.store { border-color: #10b981; background: color-mix(in srgb,#10b981 7%,var(--surface)); }
+.node.accent { border-color: var(--accent); background: color-mix(in srgb,var(--accent) 7%,var(--surface)); }
+.node.red { border-color: #f87171; background: color-mix(in srgb,#f87171 7%,var(--surface)); }
+.node.purple { border-color: #c084fc; background: color-mix(in srgb,#c084fc 7%,var(--surface)); }
+.node.new-opt { border-style: dashed; border-color: #34d399; background: color-mix(in srgb,#34d399 7%,var(--surface)); }
+.arrow { text-align:center; color: var(--muted); font-size:0.9rem; margin: 0.05rem 0; line-height: 1.4; }
+.arrow small { font-size:0.62rem; display:block; color: var(--muted); }
+.badge {
+  display: inline-block; font-size: 0.6rem; padding: 0.05rem 0.35rem;
+  border-radius: 3px; font-weight: 700; margin-left: 0.4rem; vertical-align: middle;
+}
+.badge-new { background: color-mix(in srgb,#34d399 25%,transparent); color: #34d399; border: 1px solid #34d399; }
+.badge-opt { background: color-mix(in srgb,#f59e0b 25%,transparent); color: #f59e0b; }
+.state-table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+.state-table th { background: var(--surface); color: var(--muted); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--border); text-align: left; }
+.state-table td { padding: 0.3rem 0.5rem; border-bottom: 1px solid color-mix(in srgb,var(--border) 50%,transparent); vertical-align: top; }
+.state-table tr.new-row td { background: color-mix(in srgb,#34d399 5%,transparent); }
+code { background: color-mix(in srgb,var(--accent) 12%,transparent); padding: 0.05rem 0.28rem; border-radius: 3px; font-family: monospace; font-size: 0.7rem; }
+.legend { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 0.7rem; color: var(--muted); align-items: center; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 0.3rem; }
+</style>
+
+<div class="two-col">
+
+  <!-- LEFT: LangGraph 节点流 -->
+  <div class="col">
+    <div class="section-title">LangGraph Agent 节点流（更新后）</div>
+
+    <div class="node">
+      <div class="t">📥 用户输入</div>
+      <div class="s">text（中/英）+ 可选 image（Base64）</div>
+    </div>
+    <div class="arrow">↓</div>
+
+    <div class="node decision">
+      <div class="t">🔀 QuestionAnalyzer</div>
+      <div class="s">
+        → question_type: manual | policy<br>
+        → product: 产品类型（用于 Qdrant filter）<br>
+        → sub_questions: 子问题列表<br>
+        → <span style="color:#34d399">sub_questions_dependent: bool</span> <span class="badge badge-new">NEW</span>
+      </div>
+    </div>
+    <div class="arrow">↓ <small>conditional edge</small></div>
+
+    <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem">
+      <div class="node purple" style="flex:1;margin:0">
+        <div class="t" style="font-size:0.75rem">💬 PolicyResponder</div>
+        <div class="s">检索 policy collection<br>竞赛样例 + FAQ</div>
+      </div>
+      <div class="node accent" style="flex:1.4;margin:0">
+        <div class="t" style="font-size:0.75rem">🔍 Retriever <span class="badge badge-new">UPDATED</span></div>
+        <div class="s">
+          <b>Hybrid Search</b>（优化1）：<br>
+          Dense(bge-m3) + Sparse(BM25) → RRF 合并<br>
+          dependent=T → 顺序检索（优化3）<br>
+          dependent=F → 并行检索<br>
+          score &lt; 0.5 → retrieval_failed（优化2）
+        </div>
+      </div>
+    </div>
+    <div class="arrow">↓ <small>conditional edge: retrieval_failed → FallbackResponder</small></div>
+
+    <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem">
+      <div class="node new-opt" style="flex:1;margin:0">
+        <div class="t" style="font-size:0.75rem">🚫 FallbackResponder <span class="badge badge-new">NEW</span></div>
+        <div class="s">输出标准兜底回复<br>"未找到相关内容，<br>建议联系人工客服"</div>
+      </div>
+      <div class="node accent" style="flex:1.4;margin:0">
+        <div class="t" style="font-size:0.75rem">✍️ AnswerGenerator</div>
+        <div class="s">Claude 3.5 Sonnet + vision<br>sub_questions + chunks + 候选图片<br>输出带 &lt;PIC&gt; 答案 + image_ids</div>
+      </div>
+    </div>
+    <div class="arrow">↓</div>
+
+    <div class="node red">
+      <div class="t">✅ Validator <span class="badge badge-opt">UPDATED</span></div>
+      <div class="s">
+        ① 子问题覆盖检查<br>
+        ② 图片文件存在检查<br>
+        ③ &lt;PIC&gt; 数量对齐<br>
+        ④ <span style="color:#34d399">答案溯源：关键词/数字 ⊆ chunks 原文</span> <span class="badge badge-new">NEW</span><br>
+        失败 &amp;&amp; retry &lt; 2 → 回 Retriever ｜ 失败 &amp;&amp; retry=2 → 强制输出
+      </div>
+    </div>
+    <div class="arrow">↓</div>
+
+    <div class="node store">
+      <div class="t">📤 格式化输出 → submission.csv</div>
+      <div class="s">"文字 &lt;PIC&gt; 文字", ["img1","img2"]</div>
+    </div>
+
+    <div class="legend">
+      <div><span class="legend-dot" style="background:#34d399;border:1px dashed #34d399"></span>本次新增/更新</div>
+      <div><span class="legend-dot" style="background:#f59e0b"></span>条件分支节点</div>
+      <div><span class="legend-dot" style="background:#f87171"></span>回环节点</div>
+      <div><span class="legend-dot" style="background:#10b981"></span>存储/输出</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: 完整 AgentState + 技术栈 -->
+  <div class="col">
+    <div class="section-title">完整 AgentState</div>
+    <table class="state-table">
+      <tr><th>字段</th><th>类型</th><th>由谁写入</th></tr>
+      <tr><td><code>question</code></td><td>str</td><td>输入</td></tr>
+      <tr><td><code>image_b64</code></td><td>str|None</td><td>输入</td></tr>
+      <tr><td><code>question_type</code></td><td>str</td><td>QuestionAnalyzer</td></tr>
+      <tr><td><code>product</code></td><td>str|None</td><td>QuestionAnalyzer</td></tr>
+      <tr><td><code>sub_questions</code></td><td>list[str]</td><td>QuestionAnalyzer</td></tr>
+      <tr class="new-row"><td><code>sub_q_dependent</code></td><td>bool</td><td>QuestionAnalyzer ✨</td></tr>
+      <tr><td><code>retrieved_chunks</code></td><td>list[dict]</td><td>Retriever</td></tr>
+      <tr><td><code>candidate_images</code></td><td>list[str]</td><td>Retriever</td></tr>
+      <tr class="new-row"><td><code>retrieval_failed</code></td><td>bool</td><td>Retriever ✨</td></tr>
+      <tr class="new-row"><td><code>accumulated_context</code></td><td>str</td><td>Retriever ✨</td></tr>
+      <tr><td><code>draft_answer</code></td><td>str</td><td>AnswerGenerator</td></tr>
+      <tr><td><code>used_images</code></td><td>list[str]</td><td>AnswerGenerator</td></tr>
+      <tr><td><code>validation_passed</code></td><td>bool</td><td>Validator</td></tr>
+      <tr><td><code>retry_count</code></td><td>int</td><td>Validator</td></tr>
+      <tr><td><code>final_answer</code></td><td>str</td><td>输出</td></tr>
+    </table>
+
+    <div class="section-title" style="margin-top:1rem">技术栈总览</div>
+    <table class="state-table">
+      <tr><th>层</th><th>技术选型</th></tr>
+      <tr><td>LLM</td><td>Claude 3.5 Sonnet（Anthropic API）</td></tr>
+      <tr><td>Agent 编排</td><td>LangGraph</td></tr>
+      <tr><td>向量库</td><td>Qdrant（本地持久化）</td></tr>
+      <tr><td>Dense Embedding</td><td>bge-m3（本地，fastembed）</td></tr>
+      <tr class="new-row"><td>Sparse Embedding ✨</td><td>BM25（Qdrant fastembed sparse）</td></tr>
+      <tr class="new-row"><td>检索融合 ✨</td><td>RRF（Qdrant 原生 Hybrid Search）</td></tr>
+      <tr><td>Chunking</td><td>父子 chunk + # 标题切割</td></tr>
+      <tr><td>知识库格式</td><td>Markdown（manuals/ + policy/）</td></tr>
+      <tr><td>API 服务</td><td>FastAPI（serve_api.py，按需启动）</td></tr>
+      <tr><td>批量提交</td><td>run_batch.py → submission.csv</td></tr>
+    </table>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:1rem">✅ 这就是完整的最终设计。确认无误后，我将把这份设计写成规范文档。</p>
