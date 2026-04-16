@@ -30,7 +30,7 @@ def get_dense() -> TextEmbedding:
     """Get singleton Dense embedding model."""
     global _dense_model
     if _dense_model is None:
-        _dense_model = TextEmbedding("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+        _dense_model = TextEmbedding("BAAI/bge-m3")
     return _dense_model
 
 
@@ -112,7 +112,8 @@ def hybrid_search_manuals(
         parent_id = point.payload["parent_id"]
         if parent_id not in seen_parent_ids:
             seen_parent_ids.add(parent_id)
-            parent_chunks.append(docstore[parent_id])
+            if parent_id in docstore:
+                parent_chunks.append(docstore[parent_id])
 
     return parent_chunks
 

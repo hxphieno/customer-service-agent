@@ -10,7 +10,7 @@ class AgentState(TypedDict):
     image_b64: Optional[str]
 
     # Classification
-    question_type: Optional[str]  # "general" or "product"
+    question_type: Optional[str]  # "manual" or "policy"
     product: Optional[str]
 
     # Decomposition
