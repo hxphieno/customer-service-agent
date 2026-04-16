@@ -8,6 +8,7 @@ load_dotenv()
 ANTHROPIC_API_KEY: str = os.environ.get("ANTHROPIC_API_KEY", "")
 if not ANTHROPIC_API_KEY:
     raise ValueError("ANTHROPIC_API_KEY environment variable is required. Please set it in .env file.")
+ANTHROPIC_BASE_URL: str = os.getenv("ANTHROPIC_BASE_URL", "https://api.anthropic.com")
 KAFU_API_TOKEN: str = os.getenv("KAFU_API_TOKEN", "dev-token")
 
 QDRANT_PATH: str = os.getenv("QDRANT_PATH", "./knowledge_base/qdrant_data")
