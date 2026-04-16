@@ -30,7 +30,7 @@ def get_dense() -> TextEmbedding:
     """Get singleton Dense embedding model."""
     global _dense_model
     if _dense_model is None:
-        _dense_model = TextEmbedding("BAAI/bge-m3")
+        _dense_model = TextEmbedding("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
     return _dense_model
 
 
