@@ -1,7 +1,7 @@
 """
 Chunker module: splits manual text into parent and child chunks.
 
-Parent chunks: split by # headings
+Parent chunks: split by fixed length (1500 chars)
 Child chunks: split parent chunks by max_chars, inheriting parent metadata
 """
 
@@ -10,68 +10,84 @@ from typing import Dict, List, Tuple
 
 
 def split_into_parent_chunks(
-    text: str, product: str, pic_position_map: Dict[int, str]
+    text: str, product: str, pic_position_map: Dict[int, str], max_chars: int = 1500
 ) -> List[Dict]:
     """
-    Split text by # headings into parent chunks.
+    Split text by fixed length into parent chunks, respecting sentence boundaries.
 
     Args:
         text: Manual text content
         product: Product name
         pic_position_map: {pic_index: image_id}
+        max_chars: Maximum characters per parent chunk
 
     Returns:
         List of parent chunk dicts with keys:
         - product, chapter, parent_id, text, image_ids, chunk_type
     """
-    # Split by # headings
-    sections = re.split(r'\n(?=#\s)', text)
-    chunks = []
-
-    for section in sections:
-        section = section.strip()
-        if not section:
-            continue
-
-        # Extract chapter name
-        match = re.match(r'^#\s+(.+?)(?:\n|$)', section)
-        if match:
-            chapter = match.group(1).strip()
-            section_text = section[match.end():].strip()
+    # Split by sentence boundaries
+    sentences = re.split(r'([。！？\n])', text)
+    # Recombine sentence + delimiter
+    parts = []
+    for i in range(0, len(sentences), 2):
+        if i + 1 < len(sentences):
+            parts.append(sentences[i] + sentences[i + 1])
         else:
-            chapter = "前言"
-            section_text = section
+            parts.append(sentences[i])
 
-        # Find image IDs in this section
-        pic_count = section_text.count('<PIC>')
-        image_ids = []
+    parent_chunks = []
+    current_text = ""
+    chunk_index = 0
+    global_pic_index = 0
 
-        # Map <PIC> occurrences to image IDs
-        current_pic_index = 0
-        for i in range(len(chunks)):
-            current_pic_index += chunks[i]["text"].count('<PIC>')
+    for part in parts:
+        if len(current_text) + len(part) > max_chars and current_text:
+            # Calculate image_ids for current chunk
+            pic_count = current_text.count("<PIC>")
+            image_ids = [
+                pic_position_map[global_pic_index + i]
+                for i in range(pic_count)
+                if (global_pic_index + i) in pic_position_map
+            ]
+            global_pic_index += pic_count
 
-        for i in range(pic_count):
-            pic_idx = current_pic_index + i
-            if pic_idx in pic_position_map:
-                image_ids.append(pic_position_map[pic_idx])
+            parent_id = f"{product}_p{chunk_index}"
+            parent_chunks.append({
+                "product": product,
+                "chapter": f"part_{chunk_index}",
+                "parent_id": parent_id,
+                "text": current_text.strip(),
+                "image_ids": image_ids,
+                "chunk_type": "parent",
+            })
+            current_text = part
+            chunk_index += 1
+        else:
+            current_text += part
 
-        parent_id = f"{product}_{chapter}"
-
-        chunks.append({
+    # Handle last chunk
+    if current_text.strip():
+        pic_count = current_text.count("<PIC>")
+        image_ids = [
+            pic_position_map[global_pic_index + i]
+            for i in range(pic_count)
+            if (global_pic_index + i) in pic_position_map
+        ]
+        parent_id = f"{product}_p{chunk_index}"
+        parent_chunks.append({
             "product": product,
-            "chapter": chapter,
+            "chapter": f"part_{chunk_index}",
             "parent_id": parent_id,
-            "text": section_text,
+            "text": current_text.strip(),
             "image_ids": image_ids,
-            "chunk_type": "parent"
+            "chunk_type": "parent",
         })
 
-    return chunks
+    return parent_chunks
 
 
 def split_parent_into_children(
-    parent: Dict, max_chars: int = 500
+    parent: Dict, max_chars: int = 1000
 ) -> List[Dict]:
     """
     Split a parent chunk into child chunks by max_chars.
@@ -81,76 +97,68 @@ def split_parent_into_children(
         max_chars: Maximum characters per child chunk
 
     Returns:
-        List of child chunk dicts, inheriting parent metadata
+        List of child chunk dicts, each inheriting parent's image_ids
     """
     text = parent["text"]
-    children = []
 
-    # Split by sentences to avoid breaking mid-sentence
+    # If text is short enough, return as single child
+    if len(text) <= max_chars:
+        child = parent.copy()
+        child["chunk_type"] = "child"
+        child["child_id"] = f"{parent['parent_id']}_c0"
+        return [child]
+
+    # Split by sentence boundaries
     sentences = re.split(r'([。！？\n])', text)
+    parts = []
+    for i in range(0, len(sentences), 2):
+        if i + 1 < len(sentences):
+            parts.append(sentences[i] + sentences[i + 1])
+        else:
+            parts.append(sentences[i])
 
-    current_chunk = ""
+    children = []
+    current_text = ""
     chunk_index = 0
 
-    for i in range(0, len(sentences), 2):
-        sentence = sentences[i]
-        delimiter = sentences[i + 1] if i + 1 < len(sentences) else ""
-        full_sentence = sentence + delimiter
+    for part in parts:
+        if len(current_text) + len(part) > max_chars and current_text:
+            child = parent.copy()
+            child["chunk_type"] = "child"
+            child["child_id"] = f"{parent['parent_id']}_c{chunk_index}"
+            child["text"] = current_text.strip()
+            children.append(child)
 
-        if len(current_chunk) + len(full_sentence) > max_chars and current_chunk:
-            # Save current chunk
-            child_id = f"{parent['parent_id']}_child_{chunk_index}"
-            children.append({
-                "product": parent["product"],
-                "chapter": parent["chapter"],
-                "parent_id": parent["parent_id"],
-                "child_id": child_id,
-                "text": current_chunk.strip(),
-                "image_ids": parent["image_ids"],
-                "chunk_type": "child"
-            })
+            current_text = part
             chunk_index += 1
-            current_chunk = full_sentence
         else:
-            current_chunk += full_sentence
+            current_text += part
 
     # Add remaining text
-    if current_chunk.strip():
-        child_id = f"{parent['parent_id']}_child_{chunk_index}"
-        children.append({
-            "product": parent["product"],
-            "chapter": parent["chapter"],
-            "parent_id": parent["parent_id"],
-            "child_id": child_id,
-            "text": current_chunk.strip(),
-            "image_ids": parent["image_ids"],
-            "chunk_type": "child"
-        })
+    if current_text.strip():
+        child = parent.copy()
+        child["chunk_type"] = "child"
+        child["child_id"] = f"{parent['parent_id']}_c{chunk_index}"
+        child["text"] = current_text.strip()
+        children.append(child)
 
     return children
 
 
-def chunk_manual(parsed_manual: Dict) -> Tuple[List[Dict], List[Dict]]:
+def chunk_manual(parsed: Dict) -> Tuple[List[Dict], List[Dict]]:
     """
-    Complete chunking pipeline: parent chunks + child chunks.
+    Execute complete parent-child chunking for a single manual.
 
     Args:
-        parsed_manual: Output from parser.parse_manual()
+        parsed: Parsed manual dict from parser.parse_manual()
 
     Returns:
-        (parent_chunks, child_chunks)
+        Tuple of (parent_chunks, child_chunks)
     """
-    product = parsed_manual["product"]
-    text = parsed_manual["text"]
-    pic_position_map = parsed_manual["pic_position_map"]
-
-    # Step 1: Create parent chunks
-    parent_chunks = split_into_parent_chunks(text, product, pic_position_map)
-
-    # Step 2: Create child chunks from each parent
-    child_chunks = []
-    for parent in parent_chunks:
-        children = split_parent_into_children(parent, max_chars=500)
-        child_chunks.extend(children)
-
-    return parent_chunks, child_chunks
+    parents = split_into_parent_chunks(
+        parsed["text"], parsed["product"], parsed["pic_position_map"]
+    )
+    children = []
+    for parent in parents:
+        children.extend(split_parent_into_children(parent))
+    return parents, children
