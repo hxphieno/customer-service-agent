@@ -7,18 +7,21 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from src.agent.graph import run_agent
 from src.utils.formatter import format_answer
+from src.agent.nodes.utils import flush_node_log
 
-WORKERS = 4  # 并发线程数
+WORKERS = 5  # 并发线程数
 
 INPUT_CSV = "question_public.csv"
-PROGRESS_FILE = "batch_progress_v2.csv"
-FAILURE_LOG = "batch_failures.csv"
+PROGRESS_FILE = "batch_progress_v4.csv"
+FAILURE_LOG = "logs/batch_failures.csv"
 
 _file_lock = threading.Lock()
 
 
 def load_progress():
     """加载已完成的题目"""
+    from pathlib import Path
+    Path("logs").mkdir(exist_ok=True)
     if os.path.exists(PROGRESS_FILE):
         df = pd.read_csv(PROGRESS_FILE)
         completed_ids = set(df["id"].tolist())
@@ -28,12 +31,16 @@ def load_progress():
 
 
 def log_failure(qid, question, error, tb):
+    from pathlib import Path
+    Path("logs").mkdir(exist_ok=True)
     with _file_lock:
         row = pd.DataFrame([{"id": qid, "question": question[:300], "error": str(error), "traceback": tb.strip()}])
         row.to_csv(FAILURE_LOG, mode='a', header=not os.path.exists(FAILURE_LOG), index=False, encoding="utf-8-sig")
 
 
 def save_result(qid, ret):
+    from pathlib import Path
+    Path("logs").mkdir(exist_ok=True)
     with _file_lock:
         write_header = not os.path.exists(PROGRESS_FILE)
         with open(PROGRESS_FILE, "a", newline="", encoding="utf-8-sig") as f:
@@ -46,6 +53,11 @@ def save_result(qid, ret):
 
 def main():
     print("=== 批量答题（支持断点续传）===\n")
+
+    # 预热单例，避免多线程并发初始化 Qdrant/embedding
+    from src.agent.retriever import get_client, get_dense, get_sparse, load_docstore
+    get_client(); get_dense(); get_sparse(); load_docstore()
+    print("✅ 检索器预热完成\n")
 
     # 加载进度
     progress_df, completed_ids = load_progress()
@@ -73,14 +85,15 @@ def main():
 
     def process(row):
         import traceback
+        import json as _json
+        import signal
+
         qid = row["id"]
         question = str(row["question"])
         try:
-            import json as _json
-            result = run_agent(question, None)
+            result = run_agent(question, None, question_id=str(qid))
             final_answer = result.get("final_answer", "")
             used_images = result.get("used_images", [])
-            # Handle case where final_answer is a raw JSON string like {"answer": "...", "image_ids": [...]}
             if isinstance(final_answer, str) and final_answer.strip().startswith("{"):
                 try:
                     parsed = _json.loads(final_answer)
@@ -91,6 +104,7 @@ def main():
                     pass
             ret = format_answer(final_answer, used_images)
             save_result(qid, ret)
+            flush_node_log(qid)
             with counter_lock:
                 counters["success"] += 1
                 done = counters["success"] + counters["fail"]
@@ -98,16 +112,25 @@ def main():
         except Exception as e:
             tb = traceback.format_exc()
             log_failure(qid, question, e, tb)
-            save_result(qid, f"ERROR: {str(e)}")
+            save_result(qid, f"ERROR: {str(e)[:200]}")
+            flush_node_log(qid)
             with counter_lock:
                 counters["fail"] += 1
                 done = counters["success"] + counters["fail"]
             print(f"❌ [{qid}] 失败: {e} | 进度 {done}/{total}")
 
+    TASK_TIMEOUT = 180  # 每题最多 3 分钟
+
     with ThreadPoolExecutor(max_workers=WORKERS) as executor:
-        futures = [executor.submit(process, row) for _, row in remaining.iterrows()]
-        for f in as_completed(futures):
-            f.result()
+        future_to_row = {executor.submit(process, row): row for _, row in remaining.iterrows()}
+        for f in as_completed(future_to_row):
+            row = future_to_row[f]
+            try:
+                f.result(timeout=TASK_TIMEOUT)
+            except TimeoutError:
+                qid = row["id"]
+                save_result(qid, "ERROR: timeout")
+                print(f"⏰ [{qid}] 超时")
 
     print(f"\n{'='*80}")
     print(f"=== 处理完成 ===")

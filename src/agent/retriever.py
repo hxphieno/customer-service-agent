@@ -3,7 +3,7 @@ import json
 import requests
 from typing import Optional
 from qdrant_client import QdrantClient
-from qdrant_client.models import NamedVector, NamedSparseVector, SparseVector, Prefetch, Fusion, FusionQuery
+from qdrant_client.models import NamedVector, NamedSparseVector, SparseVector, Prefetch, Fusion, FusionQuery, Filter, FieldCondition, MatchValue
 from fastembed import TextEmbedding, SparseTextEmbedding
 
 from src.utils.config import (
@@ -18,29 +18,33 @@ _client: Optional[QdrantClient] = None
 _dense_model: Optional[TextEmbedding] = None
 _sparse_model: Optional[SparseTextEmbedding] = None
 _docstore: Optional[dict] = None
+_init_lock = __import__("threading").Lock()
 
 
 def get_client() -> QdrantClient:
-    """Get singleton QdrantClient instance."""
     global _client
     if _client is None:
-        _client = QdrantClient(path=QDRANT_PATH)
+        with _init_lock:
+            if _client is None:
+                _client = QdrantClient(path=QDRANT_PATH)
     return _client
 
 
 def get_dense() -> TextEmbedding:
-    """Get singleton Dense embedding model."""
     global _dense_model
     if _dense_model is None:
-        _dense_model = TextEmbedding("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+        with _init_lock:
+            if _dense_model is None:
+                _dense_model = TextEmbedding("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
     return _dense_model
 
 
 def get_sparse() -> SparseTextEmbedding:
-    """Get singleton Sparse embedding model."""
     global _sparse_model
     if _sparse_model is None:
-        _sparse_model = SparseTextEmbedding("prithvida/Splade_PP_en_v1")
+        with _init_lock:
+            if _sparse_model is None:
+                _sparse_model = SparseTextEmbedding("prithvida/Splade_PP_en_v1")
     return _sparse_model
 
 
@@ -132,9 +136,7 @@ def hybrid_search_manuals(
     # Build filter
     query_filter = None
     if product:
-        query_filter = {"must": [{"key": "product", "match": {"value": product}}]}
-
-    # Hybrid search with RRF
+        query_filter = Filter(must=[FieldCondition(key="product", match=MatchValue(value=product))])
     results = client.query_points(
         collection_name=MANUALS_COLLECTION,
         prefetch=[
@@ -203,7 +205,7 @@ def dense_search_manual_policy(query: str, product: Optional[str] = None, top_k:
     dense_vec = next(get_dense().embed([query]))
     query_filter = None
     if product:
-        query_filter = {"must": [{"key": "product", "match": {"value": product}}]}
+        query_filter = Filter(must=[FieldCondition(key="product", match=MatchValue(value=product))])
     results = client.query_points(
         collection_name=MANUAL_POLICY_COLLECTION,
         query=dense_vec.tolist(),

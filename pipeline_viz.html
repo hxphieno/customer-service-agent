@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Agent Pipeline - 完整技术细节</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0f1117; color: #e2e8f0;
+  font-family: 'Monaco', 'Courier New', monospace;
+  padding: 24px;
+}
+h1 { font-size: 18px; color: #f8fafc; margin-bottom: 8px; }
+.subtitle { color: #64748b; font-size: 12px; margin-bottom: 24px; }
+.container { display: flex; gap: 24px; }
+.diagram-section { flex: 1; }
+.detail-panel { flex: 0 0 420px; max-height: 90vh; overflow-y: auto; }
+svg { background: #1a1f2e; border-radius: 8px; border: 1px solid #334155; }
+.section-title {
+  font-size: 12px; font-weight: 700; color: #94a3b8;
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-top: 20px; margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 1px solid #334155;
+}
+.node-card {
+  background: #1e2433; border-radius: 8px; padding: 12px;
+  margin-bottom: 10px; border: 1px solid #334155;
+  font-size: 11px; line-height: 1.5;
+}
+.node-card strong { color: #4ade80; }
+.node-card .label { color: #64748b; }
+.node-card .io { color: #a5f3fc; font-family: monospace; font-size: 10px; }
+.node-card .constraint { color: #f59e0b; }
+.flow-box {
+  background: #164e3b; border: 1px solid #22c55e; border-radius: 8px;
+  padding: 12px; margin-bottom: 10px; font-size: 11px;
+}
+.flow-box strong { color: #4ade80; }
+.code { background: #0f1117; padding: 2px 6px; border-radius: 4px; color: #a5f3fc; }
+.error { color: #ef4444; }
+.success { color: #22c55e; }
+.warning { color: #f59e0b; }
+</style>
+</head>
+<body>
+<h1>🔧 Agent Pipeline - 完整技术架构</h1>
+<p class="subtitle">Phase 1.5 详细实现 | retry_count 管理 | 无限循环防护</p>
+
+<div class="container">
+<!-- 左侧: 详细流程图 -->
+<div class="diagram-section">
+<svg viewBox="0 0 1000 2400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#475569" />
+    </marker>
+    <marker id="arrow-g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#22c55e" />
+    </marker>
+    <marker id="arrow-r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#ef4444" />
+    </marker>
+    <marker id="arrow-y" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#f59e0b" />
+    </marker>
+  </defs>
+
+  <!-- 初始化 -->
+  <text x="500" y="20" font-size="14" font-weight="bold" text-anchor="middle" fill="#f8fafc">✨ 状态初始化</text>
+  <rect x="300" y="30" width="400" height="60" rx="6" fill="#1e2433" stroke="#475569" stroke-width="1"/>
+  <text x="500" y="48" text-anchor="middle" font-size="10" fill="#cbd5e1">retry_count=0 | validation_passed=False | is_merged=False</text>
+  <text x="500" y="62" text-anchor="middle" font-size="10" fill="#cbd5e1">search_failures=[] | final_answer="" | used_images=[]</text>
+  <line x1="500" y1="90" x2="500" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- QuestionAnalyzer -->
+  <rect x="250" y="120" width="500" height="70" rx="6" fill="#164e3b" stroke="#22c55e" stroke-width="2"/>
+  <text x="500" y="138" text-anchor="middle" font-size="11" font-weight="bold" fill="#4ade80">📝 QuestionAnalyzer</text>
+  <text x="260" y="154" font-size="9" fill="#cbd5e1">输入: question, image_b64</text>
+  <text x="260" y="167" font-size="9" fill="#cbd5e1">输出: question_type, product, sub_questions (≤3), sub_q_dependent</text>
+  <text x="260" y="180" font-size="9" fill="#f59e0b">约束: sub_questions 最多 3 个，question_id 初始化</text>
+  <line x1="500" y1="190" x2="500" y2="220" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 路由分支 -->
+  <circle cx="500" cy="240" r="20" fill="#1e2433" stroke="#f59e0b" stroke-width="2"/>
+  <text x="500" y="245" text-anchor="middle" font-size="10" font-weight="bold" fill="#fde68a">type?</text>
+
+  <!-- 左: PolicyResponder -->
+  <line x1="480" y1="255" x2="250" y2="290" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="350" y="270" font-size="9" fill="#64748b">policy</text>
+  <rect x="80" y="290" width="340" height="60" rx="6" fill="#1e2433" stroke="#334155" stroke-width="1"/>
+  <text x="250" y="308" text-anchor="middle" font-size="10" font-weight="bold" fill="#cbd5e1">📋 PolicyResponder</text>
+  <text x="90" y="324" font-size="9" fill="#cbd5e1">dense_search_policy + dense_search_manual_policy</text>
+  <text x="90" y="337" font-size="9" fill="#cbd5e1">输出: retrieved_chunks, retrieval_failed=False, search_failures=[]</text>
+  <line x1="250" y1="350" x2="250" y2="380" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 右: Retriever -->
+  <line x1="520" y1="255" x2="750" y2="290" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="650" y="270" font-size="9" fill="#64748b">manual</text>
+  <rect x="580" y="290" width="340" height="90" rx="6" fill="#164e3b" stroke="#22c55e" stroke-width="2"/>
+  <text x="750" y="308" text-anchor="middle" font-size="10" font-weight="bold" fill="#4ade80">⚠️ Retriever</text>
+  <text x="590" y="324" font-size="9" fill="#cbd5e1">1. 产品验证: hybrid_search(sub_q[0], product, top_k=3)</text>
+  <text x="610" y="336" font-size="8" fill="#94a3b8">→ score > 0.5? product_verified=True</text>
+  <text x="590" y="348" font-size="9" fill="#cbd5e1">2. 混合搜索: 每个 sub_q → score > THRESHOLD 的</text>
+  <text x="590" y="361" font-size="9" fill="#cbd5e1">3. Level 3 降级: 全失败时 → extract_keywords → 再搜</text>
+  <text x="590" y="374" font-size="9" fill="#cbd5e1">输出: search_failures, partial_retrieval, product_verified</text>
+  <line x1="750" y1="380" x2="750" y2="410" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 汇聚 → AnswerGenerator -->
+  <line x1="250" y1="380" x2="500" y2="430" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="750" y1="410" x2="500" y2="430" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- AnswerGenerator (1st) -->
+  <rect x="280" y="430" width="440" height="80" rx="6" fill="#1e2433" stroke="#334155" stroke-width="1"/>
+  <text x="500" y="448" text-anchor="middle" font-size="10" font-weight="bold" fill="#cbd5e1">✍️ AnswerGenerator (retry_count={retry})</text>
+  <text x="290" y="464" font-size="9" fill="#cbd5e1">1. 图片频次统计 → Top K from retrieved_chunks</text>
+  <text x="290" y="477" font-size="9" fill="#cbd5e1">2. 多模态 Claude 调用 (with validation_feedback if retry)</text>
+  <text x="290" y="490" font-size="9" fill="#cbd5e1">3. JSON 解析 + &lt;PIC&gt; 对齐 (count must = image_ids.length)</text>
+  <text x="290" y="503" font-size="9" fill="#a5f3fc">若 feedback 非空 → retry_count += 1</text>
+  <line x1="500" y1="510" x2="500" y2="540" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Validator (1st) -->
+  <rect x="250" y="540" width="500" height="100" rx="6" fill="#164e3b" stroke="#22c55e" stroke-width="2"/>
+  <text x="500" y="558" text-anchor="middle" font-size="10" font-weight="bold" fill="#4ade80">✅ Validator (1st Pass)</text>
+  <text x="260" y="574" font-size="9" fill="#cbd5e1">【检查1】&lt;PIC&gt; 数量对齐: count("<PIC>") == len(image_ids)</text>
+  <text x="260" y="587" font-size="9" fill="#cbd5e1">【检查2】图片上限: len(image_ids) ≤ MAX_IMAGES_PER_ANSWER</text>
+  <text x="260" y="600" font-size="9" fill="#cbd5e1">【检查3】数值溯源: 答案中的数值必须在检索内容中找到</text>
+  <text x="260" y="613" font-size="9" fill="#cbd5e1">【检查4】子问题覆盖: Claude判断 (仅前三项通过时)</text>
+  <text x="260" y="626" font-size="9" fill="#f59e0b">诊断: 若失败 → diagnose_coverage_gap()</text>
+  <line x1="500" y1="640" x2="500" y2="670" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 路由: 1st Validator -->
+  <circle cx="500" cy="690" r="25" fill="#1e2433" stroke="#22c55e" stroke-width="2"/>
+  <text x="500" y="690" text-anchor="middle" font-size="10" font-weight="bold" fill="#4ade80">1st OK?</text>
+
+  <!-- 成功 → LanguageTranslator -->
+  <line x1="475" y1="700" x2="300" y2="750" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-g)"/>
+  <text x="370" y="720" font-size="9" fill="#22c55e">YES</text>
+  <rect x="180" y="750" width="240" height="50" rx="6" fill="#164e3b" stroke="#22c55e" stroke-width="2"/>
+  <text x="300" y="768" text-anchor="middle" font-size="10" font-weight="bold" fill="#4ade80">🌐 LanguageTranslator</text>
+  <text x="190" y="785" font-size="9" fill="#cbd5e1">检测语言匹配，若不符翻译</text>
+  <line x1="300" y1="800" x2="300" y2="830" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-g)"/>
+  <rect x="220" y="830" width="160" height="40" rx="6" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+  <text x="300" y="855" text-anchor="middle" font-size="11" font-weight="bold" fill="#4ade80">✅ END (成功)</text>
+
+  <!-- 失败 → 路由判断 -->
+  <line x1="525" y1="700" x2="700" y2="740" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-r)"/>
+  <text x="620" y="720" font-size="9" fill="#ef4444">NO</text>
+
+  <!-- 路由决策框 -->
+  <rect x="620" y="740" width="320" height="120" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="2"/>
+  <text x="780" y="758" text-anchor="middle" font-size="10" font-weight="bold" fill="#fde68a">🔀 route_after_validation</text>
+  <text x="630" y="776" font-size="9" fill="#fde68a">1. is_merged=True? → END ❌</text>
+  <text x="630" y="789" font-size="9" fill="#fde68a">2. search_failures OR partial_retrieval? → Filler</text>
+  <text x="630" y="802" font-size="9" fill="#fde68a">3. retry_count &lt; 1? → AnswerGenerator</text>
+  <text x="630" y="815" font-size="9" fill="#fde68a">4. else → END ❌ (forced_pass)</text>
+  <text x="630" y="829" font-size="8" fill="#fed7aa">[retry: 0 →第1次, 1 →第2次, ≥2 →停止]</text>
+
+  <!-- 路径A: Filler -->
+  <line x1="630" y1="789" x2="400" y2="890" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow-g)"/>
+  <text x="500" y="830" font-size="9" fill="#22c55e">Path A</text>
+  <rect x="250" y="890" width="300" height="70" rx="6" fill="#164e3b" stroke="#22c55e" stroke-width="2"/>
+  <text x="400" y="908" text-anchor="middle" font-size="10" font-weight="bold" fill="#4ade80">🔧 SubQuestionFiller</text>
+  <text x="260" y="924" font-size="9" fill="#cbd5e1">从 search_failures 提取 uncovered_sqs</text>
+  <text x="260" y="937" font-size="9" fill="#cbd5e1">关键词提取 → 逐个补充回答</text>
+  <text x="260" y="950" font-size="9" fill="#f59e0b">返回: is_merged=True (防循环)</text>
+  <line x1="400" y1="960" x2="400" y2="990" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- AnswerMerger -->
+  <rect x="250" y="990" width="300" height="70" rx="6" fill="#164e3b" stroke="#22c55e" stroke-width="2"/>
+  <text x="400" y="1008" text-anchor="middle" font-size="10" font-weight="bold" fill="#4ade80">🔀 AnswerMerger</text>
+  <text x="260" y="1024" font-size="9" fill="#cbd5e1">Claude 语义融合: 原答案 + filler补充</text>
+  <text x="260" y="1037" font-size="9" fill="#cbd5e1">合并图片列表，重新对齐 &lt;PIC&gt;</text>
+  <text x="260" y="1050" font-size="9" fill="#a5f3fc">输出: draft_answer, used_images, is_merged=True</text>
+  <line x1="400" y1="1060" x2="400" y2="1090" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Validator (2nd) -->
+  <rect x="250" y="1090" width="300" height="70" rx="6" fill="#164e3b" stroke="#22c55e" stroke-width="2"/>
+  <text x="400" y="1108" text-anchor="middle" font-size="10" font-weight="bold" fill="#4ade80">✅ Validator (2nd Pass)</text>
+  <text x="260" y="1124" font-size="9" fill="#cbd5e1">再检验一次合并后的答案</text>
+  <text x="260" y="1137" font-size="9" fill="#cbd5e1">无论通过/失败，is_merged=True → END</text>
+  <text x="260" y="1150" font-size="9" fill="#f59e0b">不再进行 Filler (防循环)</text>
+  <line x1="400" y1="1160" x2="400" y2="1200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 路径B: 重试生成 -->
+  <line x1="670" y1="802" x2="750" y2="890" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#arrow-y)"/>
+  <text x="720" y="830" font-size="9" fill="#f59e0b">Path B</text>
+  <path d="M 750 890 Q 800 900 850 850" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#arrow-y)"/>
+  <text x="820" y="870" font-size="8" fill="#f59e0b">回到 AnswerGenerator</text>
+  <text x="820" y="880" font-size="8" fill="#f59e0b">(with feedback, retry+1)</text>
+
+  <!-- 路径C: 强制结束 -->
+  <line x1="650" y1="860" x2="550" y2="1200" stroke="#ef4444" stroke-width="1.5" marker-end="url(#arrow-r)"/>
+  <text x="570" y="1020" font-size="9" fill="#ef4444">NO (all)</text>
+
+  <!-- 最终 END -->
+  <rect x="300" y="1200" width="200" height="40" rx="6" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+  <text x="400" y="1225" text-anchor="middle" font-size="11" font-weight="bold" fill="#4ade80">✅ END: final_answer</text>
+
+  <!-- 强制结束 -->
+  <rect x="550" y="1200" width="200" height="40" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="2"/>
+  <text x="650" y="1225" text-anchor="middle" font-size="11" font-weight="bold" fill="#fca5a5">⚠️ END: forced_pass</text>
+
+  <!-- 图例 -->
+  <text x="100" y="1300" font-size="10" fill="#94a3b8">🔑 图例:</text>
+  <line x1="100" y1="1310" x2="130" y2="1310" stroke="#22c55e" stroke-width="2"/>
+  <text x="140" y="1314" font-size="9" fill="#94a3b8">改进/核心节点</text>
+
+  <line x1="300" y1="1310" x2="330" y2="1310" stroke="#f59e0b" stroke-width="2"/>
+  <text x="340" y="1314" font-size="9" fill="#94a3b8">路由决策</text>
+
+  <line x1="500" y1="1310" x2="530" y2="1310" stroke="#ef4444" stroke-width="2"/>
+  <text x="540" y="1314" font-size="9" fill="#94a3b8">强制结束</text>
+
+  <line x1="700" y1="1310" x2="730" y2="1310" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="740" y="1314" font-size="9" fill="#94a3b8">回环重试</text>
+</svg>
+</div>
+
+<!-- 右侧: 详细说明面板 -->
+<div class="detail-panel">
+
+<div class="section-title">📊 重试次数管理</div>
+<div class="flow-box">
+<strong>重试策略:</strong><br/>
+<span class="code">retry_count=0</span> → 1st 生成 (无 feedback)<br/>
+<span class="code">feedback set</span> → retry_count=1<br/>
+<span class="code">retry_count=1</span> → 2nd 生成 (with feedback)<br/>
+<span class="code">feedback set again</span> → retry_count=2<br/>
+<span class="code">retry_count=2</span> → ❌ END (不再生成)<br/>
+<br/>
+<strong>判断条件:</strong> <span class="code">if retry_count &lt; 1</span>
+</div>
+
+<div class="section-title">🔄 路由决策树</div>
+<div class="node-card">
+<strong>route_after_validation()</strong><br/>
+<span class="label">执行顺序很重要!</span><br/>
+<div style="margin-top: 8px; font-size: 10px; font-family: monospace; line-height: 1.8;">
+if validation_passed → LanguageTranslator<br/>
+elif is_merged → END ❌<br/>
+elif search_failures OR partial_retrieval → Filler<br/>
+elif retry_count &lt; 1 → AnswerGenerator<br/>
+else → END ❌ (forced_pass)
+</div>
+</div>
+
+<div class="section-title">🛡️ 防无限循环机制</div>
+<div class="node-card">
+<strong>1. is_merged 标记</strong><br/>
+<span class="label">SubQuestionFiller 返回时:</span><br/>
+<span class="io">is_merged=True</span><br/>
+一旦设置，后续失败直接 END<br/>
+<br/>
+<strong>2. retry_count 上限</strong><br/>
+<span class="label">AnswerGenerator 增加:</span><br/>
+<span class="code">if feedback: retry_count += 1</span><br/>
+route 检查: <span class="code">retry_count &lt; 1</span><br/>
+<br/>
+<strong>3. search_failures 保持</strong><br/>
+<span class="label">进入 Filler 后不会清除</span><br/>
+避免重复判断进入 Filler
+</div>
+
+<div class="section-title">📤 节点输入输出</div>
+
+<div class="node-card">
+<strong>QuestionAnalyzer</strong><br/>
+<span class="label">输入:</span> <span class="io">question, image_b64</span><br/>
+<span class="label">输出:</span> <span class="io">question_type, product, sub_questions, sub_q_dependent</span><br/>
+<span class="constraint">约束: sub_questions ≤ 3</span>
+</div>
+
+<div class="node-card">
+<strong>Retriever</strong><br/>
+<span class="label">输入:</span> <span class="io">sub_questions, product</span><br/>
+<span class="label">输出:</span> <span class="io">retrieved_chunks, search_failures, product_verified, partial_retrieval</span><br/>
+<span class="constraint">关键: search_failures 只在此设置</span>
+</div>
+
+<div class="node-card">
+<strong>AnswerGenerator</strong><br/>
+<span class="label">输入:</span> <span class="io">retrieved_chunks, validation_feedback, retry_count</span><br/>
+<span class="label">输出:</span> <span class="io">draft_answer, used_images, [retry_count+1]</span><br/>
+<span class="constraint">仅有 feedback 时增加 retry_count</span>
+</div>
+
+<div class="node-card">
+<strong>Validator</strong><br/>
+<span class="label">输入:</span> <span class="io">draft_answer, used_images, sub_questions</span><br/>
+<span class="label">输出:</span> <span class="io">validation_passed, [validation_feedback], [final_answer]</span><br/>
+<span class="constraint">final_answer 仅在通过时设置</span>
+</div>
+
+<div class="node-card">
+<strong>SubQuestionFiller</strong><br/>
+<span class="label">输入:</span> <span class="io">search_failures, validation_feedback</span><br/>
+<span class="label">输出:</span> <span class="io">filler_answers, is_merged=True</span><br/>
+<span class="constraint">必须返回 is_merged=True!</span>
+</div>
+
+<div class="node-card">
+<strong>AnswerMerger</strong><br/>
+<span class="label">输入:</span> <span class="io">draft_answer, filler_answers</span><br/>
+<span class="label">输出:</span> <span class="io">draft_answer, used_images, is_merged=True</span><br/>
+<span class="constraint">不修改 retry_count</span>
+</div>
+
+<div class="node-card">
+<strong>LanguageTranslator</strong><br/>
+<span class="label">输入:</span> <span class="io">final_answer, question</span><br/>
+<span class="label">输出:</span> <span class="io">final_answer (翻译后)</span><br/>
+<span class="constraint">若 final_answer="" 返回空</span>
+</div>
+
+<div class="section-title">⚠️ 诊断信息类型</div>
+<div class="node-card">
+<strong>diagnose_coverage_gap():</strong><br/>
+<div style="font-size: 10px; line-height: 1.7;">
+<span class="error">检索失败:</span> search_failures 非空<br/>
+→ 无法补救，进不了 Filler<br/><br/>
+<span class="warning">拆分问题:</span> partial_retrieval=true<br/>
+→ 可以进 Filler 补充全部 sub_questions<br/><br/>
+<span class="warning">生成问题:</span> 其他情况<br/>
+→ 可以 retry_count < 1 时重新生成
+</div>
+</div>
+
+<div class="section-title">🔀 Filler 触发条件</div>
+<div class="node-card">
+<span class="success">✅ 进入 Filler:</span><br/>
+validation_passed=False AND<br/>
+(search_failures 非空 OR partial_retrieval=true)<br/>
+<br/>
+<span class="error">❌ 不进 Filler:</span><br/>
+诊断为"检索失败"且<br/>
+无法推断其他失败原因
+</div>
+
+<div class="section-title">🚫 强制通过防线</div>
+<div class="node-card">
+<strong>MAX_VALIDATOR_RETRIES=2</strong><br/>
+<span class="label">备用机制:</span><br/>
+if <span class="code">retry_count ≥ 2</span><br/>
+→ Validator 直接返回<br/>
+<span class="code">validation_passed=True</span><br/>
+<br/>
+<span class="constraint">不依赖此机制，应由路由逻辑优先阻止</span>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>

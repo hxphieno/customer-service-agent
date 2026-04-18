@@ -1,0 +1,2092 @@
+=== [6] ===
+[node] question_analyzer | q='"我想了解一下你们的退款政策，退款多久能到账？",\n"信用卡会原路返回吗？"'
+[node] policy_responder | sub_q=['退款到账时间', '信用卡退款方式（是否原路返回）']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [2] ===
+[node] question_analyzer | q='"我想咨询一下，你们的售后维修服务范围是什么？",\n"如果是人为损坏的，能维修吗？维修费用怎么算？"'
+[node] policy_responder | sub_q=['售后维修服务范围', '人为损坏的维修政策及费用计算']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [3] ===
+[node] question_analyzer | q='"请问你们的商品能开发票吗？发票类型是什么？",\n"多久能收到呢？"'
+[node] policy_responder | sub_q=['发票开具政策及可用类型', '发票到达时间']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [1] ===
+[node] question_analyzer | q='"请问你们家的商品支持7天无理由退换货吗？",\n"需要自己承担运费吗？"'
+[node] policy_responder | sub_q=['7天无理由退换货政策', '退换货运费承担规则']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [4] ===
+[node] question_analyzer | q='"我收到商品后，发现包装破损了，怎么办？",\n"影响商品退换货吗？"'
+[node] policy_responder | sub_q=['包装破损的报告和处理流程', '包装破损是否影响退换货资格']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [9] ===
+[node] question_analyzer | q='"我收到的商品少了一件，联系客服说会补发，但是过了一周还没补发！"'
+[node] policy_responder | sub_q=['漏发/缺件补发处理流程', '补发超时未到货的投诉与跟进']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [7] ===
+[node] question_analyzer | q='"我收到的商品和图片不一样，颜色偏差很大，我要投诉！"'
+[node] policy_responder | sub_q=['商品与描述不符的投诉流程', '色差问题的退换货政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [10] ===
+[node] question_analyzer | q='"你们的售后维修服务太差了，我送修的商品，过了半个月还没修好！"'
+[node] policy_responder | sub_q=['售后维修时效标准及承诺', '维修超时的处理方案或投诉途径']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [11] ===
+[node] question_analyzer | q='"你们的商品保质期有问题，我收到的商品还有1个月就过期了！"'
+[node] policy_responder | sub_q=['收到临近保质期商品的退换货政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [12] ===
+[node] question_analyzer | q='"你们的快递员态度特别差，送货时还辱骂我，我要投诉！"'
+[node] policy_responder | sub_q=['快递员服务投诉流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [13] ===
+[node] question_analyzer | q='"你们的商品存在质量问题，我使用了一次就坏了，联系客服没人管！"'
+[node] policy_responder | sub_q=['质量问题退换货流程', '投诉客服处理流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [8] ===
+[node] question_analyzer | q='"你们的商品存在虚假宣传，宣传的功能和实际不一样，我要投诉！"'
+[node] policy_responder | sub_q=['虚假宣传投诉流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [14] ===
+[node] question_analyzer | q='"我收到的商品被拆封过，里面还有污渍，明显是二手商品，我要投诉！"'
+[node] policy_responder | sub_q=['收到疑似二手/翻新商品的投诉处理流程', '商品质量问题的退换货政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [17] ===
+[node] question_analyzer | q='"我想换货，但是原来的商品包装盒丢了，还能换吗？",\n"需要我额外支付包装费吗？"'
+[node] policy_responder | sub_q=['换货是否要求提供原包装盒', '换货时包装相关费用说明']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [19] ===
+[node] question_analyzer | q='"请问你们的商品能提供纸质版说明书吗？",\n"电子版在哪里可以找到？"'
+[node] policy_responder | sub_q=['是否提供纸质版说明书', '如何获取电子版说明书']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [16] ===
+[node] question_analyzer | q='"我收到商品后，发现商品有轻微划痕，不影响使用，能申请换货吗？"'
+[node] policy_responder | sub_q=['收到商品有轻微瑕疵但不影响使用是否符合换货条件']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [18] ===
+[node] question_analyzer | q='"我想退货，但是已经超过7天无理由退换货期限了，还能退吗？"'
+[node] policy_responder | sub_q=['超过7天无理由退货期限后的退货政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [21] ===
+[node] question_analyzer | q='"我购买的商品，想开发票抬头为公司，需要注意什么？",\n"抬头写错了，能重新开具吗？"'
+[node] policy_responder | sub_q=['企业抬头发票开具所需信息和注意事项', '发票抬头错误后的重新开具流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [15] ===
+[node] question_analyzer | q='"你们的商品宣传是正品，但是我收到后验证是假货，我要投诉！"'
+[node] policy_responder | sub_q=['假货投诉处理流程', '虚假宣传赔偿政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [22] ===
+[node] question_analyzer | q='"我收到商品后，发现商品有瑕疵，但是已经使用过了，能售后吗？",\n"换货还是只能维修？"'
+[node] policy_responder | sub_q=['已使用商品发现瑕疵是否支持售后', '瑕疵商品售后方式（换货或维修）']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [20] ===
+[node] question_analyzer | q='"请问你们家的商品能寄到国外吗？",\n"运费怎么算？大概需要多久能到？"'
+[node] policy_responder | sub_q=['是否支持国际配送', '国际运费计算规则', '国际配送时效']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [23] ===
+[node] question_analyzer | q='"我想取消订单，但是订单已经付款了，能全额退款吗？"'
+[node] policy_responder | sub_q=['付款后取消订单的条件', '取消订单的退款规则']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [24] ===
+[node] question_analyzer | q='"请问你们的商品有售后保障卡吗？",\n"卡丢了，还能享受售后服务吗？"'
+[node] policy_responder | sub_q=['商品是否提供售后保障卡', '售后保障卡丢失后是否仍可享受售后服务']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [26] ===
+[node] question_analyzer | q='"请问你们的智能客服能解答哪些问题？",\n"智能客服解答不了的问题，怎么办？"'
+[node] policy_responder | sub_q=['智能客服的服务范围和能力', '智能客服无法解答时的转人工或其他支持渠道']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [33] ===
+[node] question_analyzer | q='"家支持7天无理由退货吗？",\n"需要满足什么条件？"'
+[node] policy_responder | sub_q=['7天无理由退货政策', '退货条件要求']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [34] ===
+[node] question_analyzer | q='"我购买的商品，收到后发现少发了一件，怎么办？",\n"什么时候能补寄？需要我承担运费吗？"'
+[node] policy_responder | sub_q=['少发漏发商品的处理流程', '补寄时效与运费承担规则']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [35] ===
+[node] question_analyzer | q='"想换成其他款式，能换货吗？"'
+[node] policy_responder | sub_q=['换货政策和条件']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [25] ===
+[node] question_analyzer | q='"请问你们家支持以旧换新服务吗？"'
+[node] policy_responder | sub_q=['以旧换新服务政策及流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [36] ===
+[node] question_analyzer | q='"请问商品的生产日期是什么时候？"'
+[node] retriever | product=None sub_q=['如何查看产品生产日期']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [37] ===
+[node] question_analyzer | q='"请问你们的商品能提供上门安装服务吗？"'
+[node] policy_responder | sub_q=['上门安装服务是否提供及适用范围']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [38] ===
+[node] question_analyzer | q='"请问你们的商品能提供试用装吗？"'
+[node] policy_responder | sub_q=['是否提供试用装或试用服务']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [39] ===
+[node] question_analyzer | q='"我购买的商品，使用一段时间后出现质量问题，还能售后吗？"'
+[node] policy_responder | sub_q=['质量问题售后保修条件和期限', '质量问题售后申请流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [40] ===
+[node] question_analyzer | q='"我想给商品更换成更大的尺寸，能换吗？",\n"尺寸差价怎么处理？"'
+[node] policy_responder | sub_q=['换货（尺寸升级）是否支持', '换货差价的处理方式']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [41] ===
+[node] question_analyzer | q='"快递丢失了，怎么办？"，\n"这种情况你们会怎么赔偿？多久能解决？"'
+[node] policy_responder | sub_q=['快递丢失的处理流程', '快递丢失的赔偿标准和处理时效']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [42] ===
+[node] question_analyzer | q='"我购买的商品，想申请退款，但是已经使用过了，能退吗？"'
+[node] policy_responder | sub_q=['已使用商品的退款政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [43] ===
+[node] question_analyzer | q='"我购买的商品，快递送达时，我不在家，怎么办？"'
+[node] policy_responder | sub_q=['快递无人签收的处理方式']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [3] ===
+[node] question_analyzer | q='"请问你们的商品能开发票吗？发票类型是什么？",\n"多久能收到呢？"'
+[node] policy_responder | sub_q=['发票开具政策及可用类型', '发票到达时间']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [6] ===
+[node] question_analyzer | q='"我想了解一下你们的退款政策，退款多久能到账？",\n"信用卡会原路返回吗？"'
+[node] policy_responder | sub_q=['退款到账时间', '信用卡退款是否原路返回']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [1] ===
+[node] question_analyzer | q='"请问你们家的商品支持7天无理由退换货吗？",\n"需要自己承担运费吗？"'
+[node] policy_responder | sub_q=['7天无理由退换货政策', '退换货运费承担规则']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [4] ===
+[node] question_analyzer | q='"我收到商品后，发现包装破损了，怎么办？",\n"影响商品退换货吗？"'
+[node] policy_responder | sub_q=['包装破损的报告和处理流程', '包装破损是否影响退换货资格']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [2] ===
+[node] question_analyzer | q='"我想咨询一下，你们的售后维修服务范围是什么？",\n"如果是人为损坏的，能维修吗？维修费用怎么算？"'
+[node] policy_responder | sub_q=['售后维修服务范围', '人为损坏的维修政策及费用计算方式']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [7] ===
+[node] question_analyzer | q='"我收到的商品和图片不一样，颜色偏差很大，我要投诉！"'
+[node] policy_responder | sub_q=['商品与描述不符的投诉流程', '色差问题的退换货政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [10] ===
+[node] question_analyzer | q='"你们的售后维修服务太差了，我送修的商品，过了半个月还没修好！"'
+[node] policy_responder | sub_q=['售后维修时效标准及承诺', '维修超时的处理方案或投诉途径']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [9] ===
+[node] question_analyzer | q='"我收到的商品少了一件，联系客服说会补发，但是过了一周还没补发！"'
+[node] policy_responder | sub_q=['漏发商品的补发处理流程', '补发超时的投诉与催单方式']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [8] ===
+[node] question_analyzer | q='"你们的商品存在虚假宣传，宣传的功能和实际不一样，我要投诉！"'
+[node] policy_responder | sub_q=['虚假宣传投诉流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [12] ===
+[node] question_analyzer | q='"你们的快递员态度特别差，送货时还辱骂我，我要投诉！"'
+[node] policy_responder | sub_q=['快递员服务投诉流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [13] ===
+[node] question_analyzer | q='"你们的商品存在质量问题，我使用了一次就坏了，联系客服没人管！"'
+[node] policy_responder | sub_q=['质量问题退换货流程', '客服投诉处理流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [11] ===
+[node] question_analyzer | q='"你们的商品保质期有问题，我收到的商品还有1个月就过期了！"'
+[node] policy_responder | sub_q=['收到临近保质期商品的退换货政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [14] ===
+[node] question_analyzer | q='"我收到的商品被拆封过，里面还有污渍，明显是二手商品，我要投诉！"'
+[node] policy_responder | sub_q=['收到疑似二手/翻新商品的投诉处理流程', '商品质量问题的退换货政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [19] ===
+[node] question_analyzer | q='"请问你们的商品能提供纸质版说明书吗？",\n"电子版在哪里可以找到？"'
+[node] policy_responder | sub_q=['是否提供纸质版说明书', '电子版说明书获取途径']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [26] ===
+[node] question_analyzer | q='"请问你们的智能客服能解答哪些问题？",\n"智能客服解答不了的问题，怎么办？"'
+[node] policy_responder | sub_q=['智能客服的服务范围和能力', '转人工客服或其他支持渠道的方式']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [44] ===
+[node] question_analyzer | q='"请问你们的优惠券能用于所有商品吗？"'
+[node] policy_responder | sub_q=['优惠券适用范围和使用限制']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [45] ===
+[node] question_analyzer | q='"请问你们的商品能提供终身维修服务吗？"'
+[node] policy_responder | sub_q=['终身维修服务政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [47] ===
+[node] question_analyzer | q='"我在你们平台批量购买了100件商品用于企业采购，收到货后发现有20件存在质量问题，15件少发，而且'
+[node] policy_responder | sub_q=['质量问题商品换货流程', '少发商品补寄流程', '企业采购发票重开流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [46] ===
+[node] question_analyzer | q='"我上个月购买的家电，使用不到一个月就出现故障，联系售后寄回维修，现在已经维修15天了，还没收到，而'
+[node] policy_responder | sub_q=['维修超时未归还的处理政策', '收到翻新机/非全新商品的退货退款政策', '商品欺诈（翻新充新）的赔偿政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [51] ===
+[node] question_analyzer | q='"我购买的商品在质保期内出现质量问题，寄回维修后，维修人员说需要更换配件，而且要收取配件费，但是质保'
+[node] policy_responder | sub_q=['质保期内维修收取配件费是否合规，如何申诉免费维修权益', '维修超出承诺时限的处理和赔偿方式']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [48] ===
+[node] question_analyzer | q='"我购买的食品类商品，收到后发现生产日期临近过期，而且包装破损，部分商品受潮无法食用，我要求退货退款'
+[node] policy_responder | sub_q=['包装破损/商品受潮的退货退款政策', '临近过期商品的赔偿政策', '食品安全问题的健康保障与投诉处理']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [49] ===
+[node] question_analyzer | q='"我购买的商品包装破损，商品出现损坏，而且快递员拒绝承认是运输问题，同时我已经签收商品，请问还能申请'
+[node] policy_responder | sub_q=['签收后发现包装破损及商品损坏的售后申请条件和时限', '快递运输损坏的责任认定与投诉处理流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [50] ===
+[node] question_analyzer | q='"我购买的大家电需要上门安装，但是安装人员上门后说需要额外收取配件费，而且安装服务原本应该是免费的，'
+[node] policy_responder | sub_q=['免费安装服务的范围及额外收费规定', '安装人员操作不当导致商品损坏的赔偿处理流程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [52] ===
+[node] question_analyzer | q='"我购买的大型设备需要上门检修，但是检修人员上门后说设备故障无法现场修复，需要拉回仓库维修，而且维修'
+[node] policy_responder | sub_q=['大型设备需返厂维修时的流程和时间承诺政策', '设备运输过程中损坏的责任认定与赔偿政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [54] ===
+[node] question_analyzer | q='"我购买的商品，收到后发现是临期商品（还有15天过期），但下单时页面未标注临期，而且商品包装上也没有'
+[node] policy_responder | sub_q=['临期商品未标注是否支持退货退款', '临期商品未告知是否可以申请赔偿']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [53] ===
+[node] question_analyzer | q='"我想试用商品，但是试用期间商品出现故障，而且不是人为操作导致的，同时我想延长试用期限，请问可以吗？'
+[node] policy_responder | sub_q=['试用期间非人为故障的处理政策', '试用期限延长申请规则', '试用商品故障更换政策']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [55] ===
+[node] question_analyzer | q='"我购买的商品，收到后发现商品的颜色和详情页描述的不一致，详情页是深红色，实际收到的是浅红色，而且商'
+[node] policy_responder | sub_q=['商品与描述不符（颜色差异）的换货申请流程', '商品有异味是否符合换货条件']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [57] ===
+[node] question_analyzer | q='"我购买的商品，快递寄到后，我拆开包装发现商品损坏，但是快递员已经离开，没有当场验货，请问还能申请售'
+[node] policy_responder | sub_q=['收货后发现商品损坏未当场验货是否可以申请售后', '损坏商品的售后申请流程和时限']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [64] ===
+[node] question_analyzer | q='"使用吹风机时，人员需要佩戴哪些防护装备？"'
+[node] retriever | product='吹风机' sub_q=['使用吹风机的安全防护要求']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [58] ===
+[node] question_analyzer | q='"我购买的商品，使用时发现商品的功能和详情页描述的不一致，详情页说支持无线充电，实际不支持，而且商品'
+[node] policy_responder | sub_q=['商品与描述不符是否支持退货退款', '虚假宣传/描述不符是否可以申请赔偿']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [65] ===
+[node] question_analyzer | q='"操作吹风机时，人员需要注意哪些安全要点？"'
+[node] retriever | product='吹风机' sub_q=['使用吹风机的安全注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [66] ===
+[node] question_analyzer | q='"使用吹风机时，如何调节化油器？"'
+[node] retriever | product=None sub_q=['吹风机的使用方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [67] ===
+[node] question_analyzer | q='"吹风机冷机时，该如何启动？"'
+[node] retriever | product='吹风机' sub_q=['冷机状态下的启动操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '冷机状态下的启动操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [68] ===
+[node] question_analyzer | q='"吹风机热机时，该如何启动？"'
+[node] retriever | product='吹风机' sub_q=['热机状态下的启动操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '热机状态下的启动操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [70] ===
+[node] question_analyzer | q='"空调的重要组成部件有哪些？"'
+[node] retriever | product='空调' sub_q=['空调的主要组成部件及功能']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [72] ===
+[node] question_analyzer | q='"如何给空调遥控器安装电池？"'
+[node] retriever | product='空调' sub_q=['遥控器电池安装方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [71] ===
+[node] question_analyzer | q='"如何找到空调遥控器的按键？"'
+[node] retriever | product='空调' sub_q=['遥控器按键功能说明']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '遥控器按键功能说明', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [69] ===
+[node] question_analyzer | q='"该如何关闭吹风机？"'
+[node] retriever | product='吹风机' sub_q=['关闭吹风机的操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [73] ===
+[node] question_analyzer | q='"如何安装空调遥控器支架？"'
+[node] retriever | product='空调遥控器支架' sub_q=['安装前准备和所需工具', '支架安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '安装前准备和所需工具', 'reason': 'score_below_threshold'}, {'sub_question': '支架安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [74] ===
+[node] question_analyzer | q='"如何用空调快速调节室内温度？"'
+[node] retriever | product='空调' sub_q=['温度设置与调节操作', '快速制冷/制热模式使用']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '温度设置与调节操作', 'reason': 'score_below_threshold'}, {'sub_question': '快速制冷/制热模式使用', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [76] ===
+[node] question_analyzer | q='"如何使用空调的等离子净化功能？"'
+[node] retriever | product='空调' sub_q=['等离子净化功能的开启与操作步骤', '等离子净化功能的使用注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '等离子净化功能的开启与操作步骤', 'reason': 'score_below_threshold'}, {'sub_question': '等离子净化功能的使用注意事项', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [75] ===
+[node] question_analyzer | q='"如何使用空调的自清洁运行功能？"'
+[node] retriever | product='空调' sub_q=['自清洁功能的启动方法', '自清洁运行过程及注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '自清洁功能的启动方法', 'reason': 'score_below_threshold'}, {'sub_question': '自清洁运行过程及注意事项', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [77] ===
+[node] question_analyzer | q='"单冷型空调如何开启自动运行模式？"'
+[node] retriever | product='空调' sub_q=['自动运行模式的开启操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '自动运行模式的开启操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [79] ===
+[node] question_analyzer | q='"如何开启空调的节能制冷模式？"'
+[node] retriever | product='空调' sub_q=['节能制冷模式的开启方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '节能制冷模式的开启方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [78] ===
+[node] question_analyzer | q='"如何使用空调的自动转换运行功能？"'
+[node] retriever | product='空调' sub_q=['自动转换运行功能的使用方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '自动转换运行功能的使用方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [82] ===
+[node] question_analyzer | q='"不同型号空调的清洁频率是多少？"'
+[node] retriever | product='空调' sub_q=['各型号空调清洁频率建议']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [80] ===
+[node] question_analyzer | q='"无遥控器时如何操作空调？"'
+[node] retriever | product='空调' sub_q=['无遥控器时的手动操作方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [81] ===
+[node] question_analyzer | q='"如何让空调实现自动重启？"'
+[node] retriever | product='空调' sub_q=['自动重启功能的设置方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '自动重启功能的设置方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [83] ===
+[node] question_analyzer | q='"如何清洁空调的空气滤网？"'
+[node] retriever | product='空调' sub_q=['空气滤网拆卸方法', '空气滤网清洁步骤与安装复位']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [84] ===
+[node] question_analyzer | q='"如何清洁空调的3M多重防护滤网？"'
+[node] retriever | product='空调' sub_q=['3M多重防护滤网的清洁方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '3M多重防护滤网的清洁方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [85] ===
+[node] question_analyzer | q='"如何清洁空调的等离子滤网？"'
+[node] retriever | product='空调' sub_q=['等离子滤网的拆卸方法', '等离子滤网的清洁步骤和注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [86] ===
+[node] question_analyzer | q='"如何快速组装蒸汽清洁机？"'
+[node] retriever | product='蒸汽清洁机' sub_q=['零部件清单与识别', '组装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '零部件清单与识别', 'reason': 'score_below_threshold'}, {'sub_question': '组装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [88] ===
+[node] question_analyzer | q='"如何使用蒸汽清洁机清洁硬质地面？"'
+[node] retriever | product='蒸汽清洁机' sub_q=['使用前准备和注意事项', '硬质地面清洁操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [87] ===
+[node] question_analyzer | q='"蒸汽清洁机有哪些实用的产品功能？如何快速上手使用？"'
+[node] retriever | product='蒸汽清洁机' sub_q=['主要功能与规格参数', '使用操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '主要功能与规格参数', 'reason': 'score_below_threshold'}, {'sub_question': '使用操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [90] ===
+[node] question_analyzer | q='"椅子的扶手使用一段时间后为什么会松动？"'
+[node] retriever | product='椅子' sub_q=['扶手松动的原因', '扶手松动的紧固或维护方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [89] ===
+[node] question_analyzer | q='"组装人体工学椅涉及哪些部件？"'
+[node] retriever | product='人体工学椅' sub_q=['组装部件清单', '组装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '组装部件清单', 'reason': 'score_below_threshold'}, {'sub_question': '组装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [92] ===
+[node] question_analyzer | q='"洗碗机的部件有哪些？"'
+[node] retriever | product='洗碗机' sub_q=['洗碗机的主要部件及功能说明']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '洗碗机的主要部件及功能说明', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [93] ===
+[node] question_analyzer | q='"首次使用时，如何将洗碗机连接到排水口？"'
+[node] retriever | product='洗碗机' sub_q=['排水管连接要求和安装步骤', '首次使用前的检查和准备']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '排水管连接要求和安装步骤', 'reason': 'score_below_threshold'}, {'sub_question': '首次使用前的检查和准备', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [95] ===
+[node] question_analyzer | q='"如何为洗碗机添加洗涤剂？"'
+[node] retriever | product='洗碗机' sub_q=['洗涤剂的添加方法和用量']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '洗涤剂的添加方法和用量', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [91] ===
+[node] question_analyzer | q='"这款椅子有哪些功能？"'
+[node] retriever | product='椅子' sub_q=['椅子的功能与特性']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '椅子的功能与特性', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [94] ===
+[node] question_analyzer | q='"使用前如何为洗碗机添加专用盐？"'
+[node] retriever | product='洗碗机' sub_q=['专用盐的添加位置和步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '专用盐的添加位置和步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [98] ===
+[node] question_analyzer | q='"哪些物品不适合在洗碗机中清洗？"'
+[node] retriever | product='洗碗机' sub_q=['不适合放入洗碗机清洗的物品类型']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [96] ===
+[node] question_analyzer | q='"如何为洗碗机添加洗涤块？"'
+[node] retriever | product='洗碗机' sub_q=['洗涤块的放置位置和添加方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '洗涤块的放置位置和添加方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [97] ===
+[node] question_analyzer | q='"如何在洗碗机中添加和使用亮碟剂以获得更好的洗涤效果？"'
+[node] retriever | product='洗碗机' sub_q=['亮碟剂的添加方法和位置', '亮碟剂用量设置与效果优化']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '亮碟剂的添加方法和位置', 'reason': 'score_below_threshold'}, {'sub_question': '亮碟剂用量设置与效果优化', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [99] ===
+[node] question_analyzer | q='"如何根据洗碗机型号安装餐具篮？"'
+[node] retriever | product='洗碗机' sub_q=['餐具篮的安装方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '餐具篮的安装方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [100] ===
+[node] question_analyzer | q='"使用洗碗机前如何安装可折叠下层篮架？"'
+[node] retriever | product='洗碗机' sub_q=['可折叠下层篮架的安装方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '可折叠下层篮架的安装方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [102] ===
+[node] question_analyzer | q='"如何清洁洗碗机的进水管滤网？"'
+[node] retriever | product='洗碗机' sub_q=['进水管滤网的位置和拆卸方法', '滤网清洁步骤和重新安装']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [101] ===
+[node] question_analyzer | q='"如何调节洗碗机满载时上下碗篮的高度？"'
+[node] retriever | product='洗碗机' sub_q=['上下碗篮高度调节方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '上下碗篮高度调节方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [103] ===
+[node] question_analyzer | q='"如何清洁洗碗机的上层喷淋臂？"'
+[node] retriever | product='洗碗机' sub_q=['上层喷淋臂的拆卸方法', '喷淋臂的清洁和重新安装']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [105] ===
+[node] question_analyzer | q='"如何安装空气净化器的脚轮？"'
+[node] retriever | product='空气净化器' sub_q=['脚轮安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '脚轮安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [104] ===
+[node] question_analyzer | q='"如何拆除空气净化器滤网的塑料包装？"'
+[node] retriever | product='空气净化器' sub_q=['滤网安装前的准备步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '滤网安装前的准备步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [106] ===
+[node] question_analyzer | q='"空气净化器通常有哪些模式？如何设置？这些模式有什么特点？"'
+[node] retriever | product='空气净化器' sub_q=['运行模式种类及特点', '模式设置操作方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '运行模式种类及特点', 'reason': 'score_below_threshold'}, {'sub_question': '模式设置操作方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [107] ===
+[node] question_analyzer | q='"空气净化器的室内空气质量指示灯是什么？"'
+[node] retriever | product='空气净化器' sub_q=['室内空气质量指示灯的含义和状态说明']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '室内空气质量指示灯的含义和状态说明', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [108] ===
+[node] question_analyzer | q='"如何清洁空气净化器的设备内外？"'
+[node] retriever | product='空气净化器' sub_q=['外壳清洁方法', '内部及滤网清洁方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '外壳清洁方法', 'reason': 'score_below_threshold'}, {'sub_question': '内部及滤网清洁方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [111] ===
+[node] question_analyzer | q='"如何清洁空气净化器的灰尘传感器？"'
+[node] retriever | product='空气净化器' sub_q=['灰尘传感器清洁方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [109] ===
+[node] question_analyzer | q='"如何清洁空气净化器的滤网？"'
+[node] retriever | product='空气净化器' sub_q=['滤网清洁方法和步骤', '清洁注意事项和频率']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [110] ===
+[node] question_analyzer | q='"如何更换空气净化器的滤网？"'
+[node] retriever | product='空气净化器' sub_q=['滤网更换时机和准备', '滤网拆卸与安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '滤网更换时机和准备', 'reason': 'score_below_threshold'}, {'sub_question': '滤网拆卸与安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [112] ===
+[node] question_analyzer | q='"空气净化器需要长期存放时该怎么做？"'
+[node] retriever | product='空气净化器' sub_q=['长期存放前的清洁和准备', '存放环境要求和注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [113] ===
+[node] question_analyzer | q='"如何了解这款健身单车的技术规格？"'
+[node] retriever | product='健身单车' sub_q=['技术规格参数']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '技术规格参数', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [115] ===
+[node] question_analyzer | q='"我听说买的这款健身单车配有控制台和显示功能，能为我介绍一下吗？"'
+[node] retriever | product='健身单车' sub_q=['控制台功能介绍', '显示屏显示内容说明']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '控制台功能介绍', 'reason': 'score_below_threshold'}, {'sub_question': '显示屏显示内容说明', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [116] ===
+[node] question_analyzer | q='"在健身单车上运动前，我需要调整什么来保证运动的舒适度？"'
+[node] retriever | product='健身单车' sub_q=['座椅高度和位置调整', '车把高度和角度调整']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [114] ===
+[node] question_analyzer | q='"启动健身单车前，我需要做什么？"'
+[node] retriever | product='健身单车' sub_q=['使用前安全检查与准备', '启动操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '使用前安全检查与准备', 'reason': 'score_below_threshold'}, {'sub_question': '启动操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [117] ===
+[node] question_analyzer | q='"使用健身单车的轻松骑行类别时，我能体验到哪些预设运动程序？"'
+[node] retriever | product='健身单车' sub_q=['轻松骑行类别下的预设运动程序列表']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '轻松骑行类别下的预设运动程序列表', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [120] ===
+[node] question_analyzer | q='"如果我想编辑健身单车的用户档案，需要遵循哪些步骤？"'
+[node] retriever | product='健身单车' sub_q=['如何创建或编辑用户档案']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [121] ===
+[node] question_analyzer | q='"我想在使用健身单车时设置心率目标，能否根据我的年龄为我推荐合适的目标心率？"'
+[node] retriever | product='健身单车' sub_q=['如何设置心率目标', '按年龄推荐的目标心率范围']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [119] ===
+[node] question_analyzer | q='"挑战健身单车的最高难度类别时，我能体验到哪些预设运动程序？"'
+[node] retriever | product='健身单车' sub_q=['最高难度类别的预设运动程序有哪些']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '最高难度类别的预设运动程序有哪些', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [118] ===
+[node] question_analyzer | q='"使用健身单车的山地类别时，我能体验到哪些预设运动程序？"'
+[node] retriever | product='健身单车' sub_q=['山地类别下的预设运动程序列表']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '山地类别下的预设运动程序列表', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [122] ===
+[node] question_analyzer | q='"我听说这款健身单车有体能测试程序，这是什么功能？"'
+[node] retriever | product='健身单车' sub_q=['体能测试程序的功能介绍', '体能测试程序的使用方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [123] ===
+[node] question_analyzer | q='"如果要给电钻充电，需要遵循哪些步骤？"'
+[node] retriever | product='电钻' sub_q=['电钻充电前的准备和注意事项', '电钻充电操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [126] ===
+[node] question_analyzer | q='"使用电钻时，如何安装单套无键夹头？"'
+[node] retriever | product='电钻' sub_q=['无键夹头的安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '无键夹头的安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [124] ===
+[node] question_analyzer | q='"我的DCB101型号电钻指示灯闪烁时，这些闪烁标识代表什么含义？"'
+[node] retriever | product='电钻' sub_q=['DCB101指示灯闪烁含义说明']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': 'DCB101指示灯闪烁含义说明', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [127] ===
+[node] question_analyzer | q='"如果要安装和拆卸电钻的电池组，需要遵循什么步骤？"'
+[node] retriever | product='电钻' sub_q=['电池组安装步骤', '电池组拆卸步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '电池组安装步骤', 'reason': 'score_below_threshold'}, {'sub_question': '电池组拆卸步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [128] ===
+[node] question_analyzer | q='"使用电钻的腰带挂钩和批头夹时，需要特别注意什么？"'
+[node] retriever | product='电钻' sub_q=['腰带挂钩使用注意事项', '批头夹使用注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '腰带挂钩使用注意事项', 'reason': 'score_below_threshold'}, {'sub_question': '批头夹使用注意事项', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [129] ===
+[node] question_analyzer | q='"购买电钻后，应配备哪些附件？"'
+[node] retriever | product='电钻' sub_q=['电钻推荐配件及用途']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '电钻推荐配件及用途', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [131] ===
+[node] question_analyzer | q='"购买健身追踪器后，包装盒里应该有什么？"'
+[node] retriever | product='健身追踪器' sub_q=['包装盒内含物清单']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '包装盒内含物清单', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [133] ===
+[node] question_analyzer | q='"为了让健身追踪器性能更佳，日常佩戴和运动时该将其佩戴在什么位置？"'
+[node] retriever | product='健身追踪器' sub_q=['日常佩戴位置建议', '运动时佩戴位置建议']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [130] ===
+[node] question_analyzer | q='"电钻的三年有限保修包含哪些内容？"'
+[node] policy_responder | sub_q=['三年有限保修的覆盖范围', '三年有限保修的exclusions和限制条件']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [134] ===
+[node] question_analyzer | q='"我的健身追踪器表带太紧了，该如何扣紧表带？"'
+[node] retriever | product='健身追踪器' sub_q=['表带松紧调节方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '表带松紧调节方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [132] ===
+[node] question_analyzer | q='"我刚发现健身追踪器电量低，该如何正确为其充电？"'
+[node] retriever | product='健身追踪器' sub_q=['充电方法和步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '充电方法和步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [135] ===
+[node] question_analyzer | q='"我想取下健身追踪器，该如何正确拆卸表带？"'
+[node] retriever | product='健身追踪器' sub_q=['表带拆卸方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [137] ===
+[node] question_analyzer | q='"健身追踪器能对手机的通知实现哪些功能？"'
+[node] retriever | product='健身追踪器' sub_q=['手机通知同步与显示功能', '通知管理设置（筛选/开关）']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [138] ===
+[node] question_analyzer | q='"能告诉我健身追踪器是如何追踪皮肤温度变化的吗？"'
+[node] retriever | product='健身追踪器' sub_q=['皮肤温度追踪的传感器原理与工作方式']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [136] ===
+[node] question_analyzer | q='"我听说可以操作健身追踪器的界面，具体该遵循哪些步骤？"'
+[node] retriever | product='健身追踪器' sub_q=['界面导航与操作方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '界面导航与操作方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [139] ===
+[node] question_analyzer | q='"通过运动应用，健身追踪器是如何追踪并分析我的运动情况的？"'
+[node] retriever | product='健身追踪器' sub_q=['健身追踪器的运动数据采集与传感器工作原理', '运动应用的数据同步与分析功能']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [140] ===
+[node] question_analyzer | q='"健身追踪器是如何测量我的心率的？"'
+[node] retriever | product='健身追踪器' sub_q=['心率测量原理与传感器说明']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [141] ===
+[node] question_analyzer | q='"我该如何仅使用健身追踪器完成消费支付？"'
+[node] retriever | product='健身追踪器' sub_q=['支付功能的设置与绑定', '使用健身追踪器进行支付的操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '支付功能的设置与绑定', 'reason': 'score_below_threshold'}, {'sub_question': '使用健身追踪器进行支付的操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [144] ===
+[node] question_analyzer | q='"我想给健身追踪器设置锁屏，该如何实现？"'
+[node] retriever | product='健身追踪器' sub_q=['锁屏功能设置方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '锁屏功能设置方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [142] ===
+[node] question_analyzer | q='"使用健身追踪器时，我可能会遇到哪些问题以及该如何解决？"'
+[node] retriever | product='健身追踪器' sub_q=['常见故障及排除方法', '设备连接与同步问题处理']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '常见故障及排除方法', 'reason': 'score_below_threshold'}, {'sub_question': '设备连接与同步问题处理', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [146] ===
+[node] question_analyzer | q='"给冰箱连接电源时，需要做到哪些注意事项？只需告诉我手册中的前五条。"'
+[node] retriever | product='冰箱' sub_q=['电源连接注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '电源连接注意事项', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [145] ===
+[node] question_analyzer | q='"使用冰箱冰柜时需要注意什么？只需告诉我手册中的前五条。"'
+[node] retriever | product='冰箱冰柜' sub_q=['使用注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '使用注意事项', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [154] ===
+[node] question_analyzer | q='"发电机工作后，发动机和消音器可能会发烫，这种情况下我该如何保证自身安全？"'
+[node] retriever | product='发电机' sub_q=['发动机和消音器高温烫伤风险及防护措施', '发电机使用后的冷却等待要求']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '发动机和消音器高温烫伤风险及防护措施', 'reason': 'score_below_threshold'}, {'sub_question': '发电机使用后的冷却等待要求', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [153] ===
+[node] question_analyzer | q='"考虑到燃油高度易燃且有毒，使用发电机时我需要注意什么？"'
+[node] retriever | product='发电机' sub_q=['燃油存储和加注安全注意事项', '发电机运行环境和通风要求']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [155] ===
+[node] question_analyzer | q='"日常使用中，如何防止发电机触电事故的发生？"'
+[node] retriever | product='发电机' sub_q=['发电机安全用电注意事项', '发电机接地与防触电措施']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [157] ===
+[node] question_analyzer | q='"使用发电机时，燃油的使用前检查十分重要，该如何操作？"'
+[node] retriever | product='发电机' sub_q=['燃油使用前检查步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [156] ===
+[node] question_analyzer | q='"需要通过发电机的燃油开关旋钮供油时，我该遵循哪些步骤？"'
+[node] retriever | product='发电机' sub_q=['燃油开关旋钮的位置和功能说明', '供油操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '燃油开关旋钮的位置和功能说明', 'reason': 'score_below_threshold'}, {'sub_question': '供油操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [159] ===
+[node] question_analyzer | q='"我需要给发电机连接交流电，该过程中如何保证自身安全？"'
+[node] retriever | product='发电机' sub_q=['连接交流电的操作步骤', '连接交流电的安全注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [158] ===
+[node] question_analyzer | q='"启动发电机发动机的前两个步骤是什么？"'
+[node] retriever | product='发电机' sub_q=['启动前准备检查', '启动操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [160] ===
+[node] question_analyzer | q='"我注意到发电机上有两种不同的开关，请为我介绍一下。"'
+[node] retriever | product='发电机' sub_q=['发电机各开关的名称与功能说明']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '发电机各开关的名称与功能说明', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [161] ===
+[node] question_analyzer | q='"我该在哪里查找并记录发电机的标识信息？"'
+[node] retriever | product='发电机' sub_q=['发电机标识信息的位置', '标识信息的记录方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '发电机标识信息的位置', 'reason': 'score_below_threshold'}, {'sub_question': '标识信息的记录方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [163] ===
+[node] question_analyzer | q='"使用发电机前，对发动机机油进行使用前检查十分重要，正确的步骤是什么？"'
+[node] retriever | product='发电机' sub_q=['发动机机油使用前检查步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '发动机机油使用前检查步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [164] ===
+[node] question_analyzer | q='"根据手册说明，启动发电机发动机的最后三个步骤是什么？"'
+[node] retriever | product='发电机' sub_q=['启动发动机的操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '启动发动机的操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [166] ===
+[node] question_analyzer | q='"我需要让发电机的发动机停机，告诉我该如何操作。"'
+[node] retriever | product='发电机' sub_q=['发动机停机操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '发动机停机操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [165] ===
+[node] question_analyzer | q='"发电机的电池电量不足了，该如何正确充电？"'
+[node] retriever | product='发电机' sub_q=['电池充电前的注意事项', '电池充电操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [162] ===
+[node] question_analyzer | q='"使用发电机的直流保护器时，我需要注意什么？"'
+[node] retriever | product='发电机' sub_q=['直流保护器的功能与工作原理', '使用直流保护器的注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [167] ===
+[node] question_analyzer | q='"根据手册的建议，使用发电机时该如何检查火花塞？"'
+[node] retriever | product='发电机' sub_q=['火花塞检查步骤与标准']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '火花塞检查步骤与标准', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [169] ===
+[node] question_analyzer | q='"我在操作发电机空气滤清器时出现了失误，请告诉我正确的步骤。"'
+[node] retriever | product='发电机' sub_q=['空气滤清器的清洁或更换步骤', '空气滤清器操作注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [168] ===
+[node] question_analyzer | q='"为了正确更换发电机的发动机机油，我需要遵循的前六个步骤是什么？"'
+[node] retriever | product='发电机' sub_q=['更换发动机机油的准备工作和所需工具', '更换发动机机油的操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '更换发动机机油的准备工作和所需工具', 'reason': 'score_below_threshold'}, {'sub_question': '更换发动机机油的操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [170] ===
+[node] question_analyzer | q='"如果发电机的发动机无法启动，我该怎么办？"'
+[node] retriever | product='发电机' sub_q=['发动机启动前检查项目', '发动机无法启动的故障排查']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [172] ===
+[node] question_analyzer | q='"使用该发电机为对电压敏感的精密设备供电前，我需要做什么？"'
+[node] retriever | product='发电机' sub_q=['发电机输出电压稳定性规格与调节方法', '为精密设备供电的注意事项与前置检查']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '发电机输出电压稳定性规格与调节方法', 'reason': 'score_below_threshold'}, {'sub_question': '为精密设备供电的注意事项与前置检查', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [173] ===
+[node] question_analyzer | q='"在划船或钓鱼的场景中，拖曳速度、半滑航速度和滑航速度分别指什么，它们在技巧和应用上有何不同？"'
+[node] retriever | product=None sub_q=['拖曳速度、半滑航速度和滑航速度的定义与区别', '各速度模式的操作技巧与适用场景']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [174] ===
+[node] question_analyzer | q='"如何在深水中登上并平衡摩托艇，确保操作的安全性和稳定性？"'
+[node] retriever | product='摩托艇' sub_q=['深水中登艇的正确方法与步骤', '摩托艇平衡与稳定操作要点', '水上安全注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [175] ===
+[node] question_analyzer | q='"在滑航速度下驾驶摩托艇转弯时，有哪些技巧能在急转弯时保证稳定性和操控性？"'
+[node] retriever | product='摩托艇' sub_q=['滑航状态下的转弯操作方法', '急转弯时的稳定性控制技巧']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [176] ===
+[node] question_analyzer | q='"驾驶摩托艇时，有哪些技巧能在完成大椭圆转弯、绕圈和8字行驶动作的同时，保持操控性和稳定性？"'
+[node] retriever | product='摩托艇' sub_q=['大椭圆转弯和绕圈操作技巧', '8字行驶操作技巧与注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [171] ===
+[node] question_analyzer | q='"我需要将发电机的燃油排空，该如何正确操作？"'
+[node] retriever | product='发电机' sub_q=['燃油排空前的准备工作', '燃油排空操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '燃油排空前的准备工作', 'reason': 'score_below_threshold'}, {'sub_question': '燃油排空操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [178] ===
+[node] question_analyzer | q='"如何驾驶摩托艇以拖曳速度直行和转弯，保证操作的平顺性和操控性？"'
+[node] retriever | product='摩托艇' sub_q=['拖曳速度下直行操作要领', '拖曳速度下转弯操作技巧']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [177] ===
+[node] question_analyzer | q='"在驾驶摩托艇进行中低速转弯时，如何控制油门并保持行驶的稳定性和操控性？"'
+[node] retriever | product='摩托艇' sub_q=['中低速转弯时的油门控制方法', '转弯过程中保持稳定性和操控性的技巧']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [179] ===
+[node] question_analyzer | q='"摩托艇全加速行驶时，如何安全平稳地将其停稳？"'
+[node] retriever | product='摩托艇' sub_q=['减速操作步骤', '靠岸/停泊操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '减速操作步骤', 'reason': 'score_below_threshold'}, {'sub_question': '靠岸/停泊操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [182] ===
+[node] question_analyzer | q='"水泵的核心部件有哪些？"'
+[node] retriever | product='水泵' sub_q=['水泵的核心部件组成']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '水泵的核心部件组成', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [180] ===
+[node] question_analyzer | q='"驾驶摩托艇时，如何避免发生碰撞事故，保障自身和水上其他人员的安全？"'
+[node] retriever | product='摩托艇' sub_q=['驾驶摩托艇的安全规则与避碰规定', '紧急情况下的避碰操作方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [181] ===
+[node] question_analyzer | q='"水泵发动机安全停机的正确步骤是什么？"'
+[node] retriever | product='水泵' sub_q=['安全停机前的准备事项', '停机操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '安全停机前的准备事项', 'reason': 'score_below_threshold'}, {'sub_question': '停机操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [183] ===
+[node] question_analyzer | q='"清洗油箱滤网的详细步骤是什么？"'
+[node] retriever | product=None sub_q=['清洗油箱滤网前的准备工作', '油箱滤网清洗步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '清洗油箱滤网前的准备工作', 'reason': 'score_below_threshold'}, {'sub_question': '油箱滤网清洗步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [184] ===
+[node] question_analyzer | q='"水泵安全排放燃油的正确步骤是什么？"'
+[node] retriever | product='水泵' sub_q=['排放燃油前的安全准备', '燃油排放操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '排放燃油前的安全准备', 'reason': 'score_below_threshold'}, {'sub_question': '燃油排放操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [187] ===
+[node] question_analyzer | q='"如何调整温控器的系统和风扇运行设置，以优化供暖和制冷效果？"'
+[node] retriever | product='温控器' sub_q=['系统模式设置（供暖/制冷/自动）', '风扇运行模式设置']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [185] ===
+[node] question_analyzer | q='"水泵无法抽水的潜在原因有哪些，该如何有效诊断并解决这些问题？"'
+[node] retriever | product='水泵' sub_q=['水泵无法抽水的常见原因及故障诊断方法', '水泵故障的排除与修复步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [186] ===
+[node] question_analyzer | q='"如何为温控器设置日期和时间，以实现精准的日程和温度控制？"'
+[node] retriever | product='温控器' sub_q=['日期和时间设置方法', '日程与温度计划编程']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '日期和时间设置方法', 'reason': 'score_below_threshold'}, {'sub_question': '日程与温度计划编程', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [189] ===
+[node] question_analyzer | q='"如何在不影响已编程日程的情况下，临时更改温控器的温度设置？"'
+[node] retriever | product='温控器' sub_q=['临时温度覆盖功能的使用方法', '临时设置与已编程日程的关系及恢复机制']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [190] ===
+[node] question_analyzer | q='"当设备或系统出现警报界面时，应采取哪些操作？"'
+[node] retriever | product=None sub_q=['警报界面的含义与类型', '警报发生时的处理操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '警报界面的含义与类型', 'reason': 'score_below_threshold'}, {'sub_question': '警报发生时的处理操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [188] ===
+[node] question_analyzer | q='"如何调整温控器的程序日程，以实现高效的能源利用和温度控制？"'
+[node] retriever | product='温控器' sub_q=['如何设置程序日程（时间段与温度）', '节能模式与温度控制策略']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '如何设置程序日程（时间段与温度）', 'reason': 'score_below_threshold'}, {'sub_question': '节能模式与温度控制策略', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [191] ===
+[node] question_analyzer | q='"针对热泵应如何修改接线，以确保连接正确且功能正常？"'
+[node] retriever | product='热泵' sub_q=['热泵接线规范与端子说明', '接线修改后的检查与验证步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '热泵接线规范与端子说明', 'reason': 'score_below_threshold'}, {'sub_question': '接线修改后的检查与验证步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [193] ===
+[node] question_analyzer | q='"当标签与端子不匹配时，应如何正确为温控器重新接线，确保连接无误？"'
+[node] retriever | product='温控器' sub_q=['标签与端子不匹配的原因及识别方法', '重新接线的正确步骤与注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [192] ===
+[node] question_analyzer | q='"如何安全更换温控器的电池，确保更换后设备功能正常？"'
+[node] retriever | product='温控器' sub_q=['电池更换步骤与注意事项', '更换后功能验证方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '电池更换步骤与注意事项', 'reason': 'score_below_threshold'}, {'sub_question': '更换后功能验证方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [194] ===
+[node] question_analyzer | q='"遇到温控器故障时，可采用哪些故障排除解决方案？"'
+[node] retriever | product=None sub_q=['温控器常见故障现象及原因', '温控器故障排除步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [195] ===
+[node] question_analyzer | q='"设备或系统中构成处理器单元的关键组件或部件有哪些？"'
+[node] retriever | product=None sub_q=['处理器单元的组成部件及功能']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '处理器单元的组成部件及功能', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [196] ===
+[node] question_analyzer | q='"耳机有哪些类型，以及如何更换耳塞？"'
+[node] retriever | product='耳机' sub_q=['耳机类型有哪些', '如何更换耳塞']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [197] ===
+[node] question_analyzer | q='"为保持遮光罩的清晰度和功能性，正确的清洁步骤是什么？"'
+[node] retriever | product='遮光罩' sub_q=['遮光罩清洁方法与注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [198] ===
+[node] question_analyzer | q='"为确保安全且最佳的使用效果，游玩区域的推荐尺寸是多少？"'
+[node] retriever | product=None sub_q=['游玩区域推荐尺寸']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '游玩区域推荐尺寸', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [201] ===
+[node] question_analyzer | q='"功能键盘的保修政策中，损害赔偿的除外责任或免责声明通常是什么？"'
+[node] policy_responder | sub_q=['保修政策中的除外责任范围', '损害赔偿免责声明条款']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [199] ===
+[node] question_analyzer | q='"使用和操作VR头显时应采取哪些安全预防措施，以确保用户安全和设备使用寿命？"'
+[node] retriever | product='VR头显' sub_q=['使用VR头显的用户安全注意事项', 'VR头显的设备保养与存储建议']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '使用VR头显的用户安全注意事项', 'reason': 'score_below_threshold'}, {'sub_question': 'VR头显的设备保养与存储建议', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [203] ===
+[node] question_analyzer | q='"如何拆卸和重新安装功能键盘的轴体？"'
+[node] retriever | product='机械键盘' sub_q=['轴体拆卸方法', '轴体安装方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [202] ===
+[node] question_analyzer | q='"如何设置功能键盘？"'
+[node] retriever | product=None sub_q=['功能键盘的设置方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '功能键盘的设置方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [200] ===
+[node] question_analyzer | q='"功能键盘的保修政策通常包含哪些内容，又不包含哪些内容？"'
+[node] policy_responder | sub_q=['保修政策涵盖的范围', '保修政策不涵盖的范围']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] answer_generator | retry=0
+[node] validator | retry=1
+[node] language_translator
+
+=== [205] ===
+[node] question_analyzer | q='"如何在硬件模式下使用功能键盘？"'
+[node] retriever | product=None sub_q=['硬件模式的启用/切换方法', '功能键盘的使用操作']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '硬件模式的启用/切换方法', 'reason': 'score_below_threshold'}, {'sub_question': '功能键盘的使用操作', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [204] ===
+[node] question_analyzer | q='"如何将功能键盘搭配CAM软件使用？"'
+[node] retriever | product='功能键盘' sub_q=['功能键盘与CAM软件的连接配置', '功能键盘在CAM软件中的按键映射与使用']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '功能键盘与CAM软件的连接配置', 'reason': 'score_below_threshold'}, {'sub_question': '功能键盘在CAM软件中的按键映射与使用', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [206] ===
+[node] question_analyzer | q='"如何安装儿童电动摩托车的挡泥板？"'
+[node] retriever | product='儿童电动摩托车' sub_q=['挡泥板安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '挡泥板安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [207] ===
+[node] question_analyzer | q='"如何安装儿童电动摩托车的前轮？"'
+[node] retriever | product='儿童电动摩托车' sub_q=['前轮安装所需工具和零件', '前轮安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '前轮安装所需工具和零件', 'reason': 'score_below_threshold'}, {'sub_question': '前轮安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [208] ===
+[node] question_analyzer | q='"如何为蓝牙激光鼠标安装电池？"'
+[node] retriever | product='蓝牙激光鼠标' sub_q=['电池仓位置及开启方式', '电池安装规格与步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '电池仓位置及开启方式', 'reason': 'score_below_threshold'}, {'sub_question': '电池安装规格与步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [210] ===
+[node] question_analyzer | q='"如何为蓝牙激光鼠标卸载WIDCOMM蓝牙驱动程序？"'
+[node] retriever | product='蓝牙激光鼠标' sub_q=['卸载WIDCOMM蓝牙驱动程序的步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [211] ===
+[node] question_analyzer | q='"如何在Windows系统中为蓝牙激光鼠标设置快速配对？"'
+[node] retriever | product='蓝牙激光鼠标' sub_q=['蓝牙快速配对模式激活方法', 'Windows系统蓝牙配对操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [209] ===
+[node] question_analyzer | q='"如何为蓝牙激光鼠标安装WIDCOMM蓝牙驱动程序？"'
+[node] retriever | product='蓝牙激光鼠标' sub_q=['WIDCOMM蓝牙驱动程序安装步骤', '安装前的系统要求与准备']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': 'WIDCOMM蓝牙驱动程序安装步骤', 'reason': 'score_below_threshold'}, {'sub_question': '安装前的系统要求与准备', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [212] ===
+[node] question_analyzer | q='"如何通过WIDCOMM蓝牙驱动程序为蓝牙激光鼠标设置配对？"'
+[node] retriever | product='蓝牙激光鼠标' sub_q=['WIDCOMM蓝牙驱动程序配对设备的操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [213] ===
+[node] question_analyzer | q='"如何查看蓝牙激光鼠标的电量状态？"'
+[node] retriever | product='蓝牙激光鼠标' sub_q=['电量状态查看方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [216] ===
+[node] question_analyzer | q='"如何拆卸烤箱门？"'
+[node] retriever | product='烤箱' sub_q=['烤箱门拆卸步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [214] ===
+[node] question_analyzer | q='"如何首次为蓝牙激光鼠标使用该驱动程序？"'
+[node] retriever | product='蓝牙激光鼠标' sub_q=['驱动程序安装步骤', '首次蓝牙配对连接方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '驱动程序安装步骤', 'reason': 'score_below_threshold'}, {'sub_question': '首次蓝牙配对连接方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [215] ===
+[node] question_analyzer | q='"如何将蓝牙激光鼠标与其他人机接口设备相连接？"'
+[node] retriever | product='蓝牙激光鼠标' sub_q=['蓝牙配对模式激活方法', '与其他设备的连接步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '蓝牙配对模式激活方法', 'reason': 'score_below_threshold'}, {'sub_question': '与其他设备的连接步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [217] ===
+[node] question_analyzer | q='"如何安装烤箱门？"'
+[node] retriever | product='烤箱' sub_q=['烤箱门安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '烤箱门安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [218] ===
+[node] question_analyzer | q='"如何移动烤箱的顶部加热元件（仅限部分型号）？"'
+[node] retriever | product='烤箱' sub_q=['顶部加热元件的移动操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '顶部加热元件的移动操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [219] ===
+[node] question_analyzer | q='"如何更换烤箱的后部灯（如有）？"'
+[node] retriever | product='烤箱' sub_q=['后部灯的位置及拆卸方法', '更换灯泡的规格要求和安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '后部灯的位置及拆卸方法', 'reason': 'score_below_threshold'}, {'sub_question': '更换灯泡的规格要求和安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [221] ===
+[node] question_analyzer | q='"如何清洁烤箱外部？"'
+[node] retriever | product='烤箱' sub_q=['烤箱外部清洁方法和注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [222] ===
+[node] question_analyzer | q='"如何使用烤箱的烤架？"'
+[node] retriever | product='烤箱' sub_q=['烤架的安装与位置调节', '使用烤架烘烤的操作方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '烤架的安装与位置调节', 'reason': 'score_below_threshold'}, {'sub_question': '使用烤架烘烤的操作方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [220] ===
+[node] question_analyzer | q='"如何使用烤箱的接油盘？"'
+[node] retriever | product='烤箱' sub_q=['接油盘的安装位置和方法', '接油盘的使用注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '接油盘的安装位置和方法', 'reason': 'score_below_threshold'}, {'sub_question': '接油盘的使用注意事项', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [223] ===
+[node] question_analyzer | q='"烤箱的催化侧面板有什么作用？"'
+[node] retriever | product='烤箱' sub_q=['催化侧面板的功能和工作原理']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '催化侧面板的功能和工作原理', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [226] ===
+[node] question_analyzer | q='"如何使用烤箱的油脂过滤器？"'
+[node] retriever | product='烤箱' sub_q=['油脂过滤器的安装与拆卸', '油脂过滤器的清洁与维护']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '油脂过滤器的安装与拆卸', 'reason': 'score_below_threshold'}, {'sub_question': '油脂过滤器的清洁与维护', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [224] ===
+[node] question_analyzer | q='"如何使用烤箱的烤盘？"'
+[node] retriever | product='烤箱' sub_q=['烤盘的安装与放置方式', '烤盘使用注意事项']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [225] ===
+[node] question_analyzer | q='"如何使用烤箱的烤架烤盘套装？"'
+[node] retriever | product='烤箱' sub_q=['烤架烤盘套装的安装与放置', '烤架烤盘套装的使用方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [227] ===
+[node] question_analyzer | q='"如何使用烤箱的滑动搁架？"'
+[node] retriever | product='烤箱' sub_q=['滑动搁架的安装与拆卸', '滑动搁架的使用方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [228] ===
+[node] question_analyzer | q='"如何为混合即时相机安装肩带？"'
+[node] retriever | product='混合即时相机' sub_q=['肩带安装方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '肩带安装方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [229] ===
+[node] question_analyzer | q='"如何为混合即时相机装入电池？"'
+[node] retriever | product='混合即时相机' sub_q=['电池规格与类型', '电池安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '电池规格与类型', 'reason': 'score_below_threshold'}, {'sub_question': '电池安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [230] ===
+[node] question_analyzer | q='"如何为混合即时相机装入相纸盒？"'
+[node] retriever | product='混合即时相机' sub_q=['相纸盒装入步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '相纸盒装入步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [231] ===
+[node] question_analyzer | q='"如何为混合即时相机取出用完的相纸盒？"'
+[node] retriever | product='混合即时相机' sub_q=['取出用完的相纸盒的操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '取出用完的相纸盒的操作步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [232] ===
+[node] question_analyzer | q='"如何设置混合即时相机的自动打印模式？"'
+[node] retriever | product='混合即时相机' sub_q=['自动打印模式的设置方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '自动打印模式的设置方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [233] ===
+[node] question_analyzer | q='"如何设置混合即时相机的手动打印模式（初始设置）？"'
+[node] retriever | product='混合即时相机' sub_q=['手动打印模式的初始设置步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '手动打印模式的初始设置步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [234] ===
+[node] question_analyzer | q='"如何使用混合即时相机拍摄照片？"'
+[node] retriever | product='混合即时相机' sub_q=['拍摄前的准备和设置', '拍摄操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [241] ===
+[node] question_analyzer | q='"If this is the first time to use airfryer, What s'
+[node] retriever | product='airfryer' sub_q=['First use preparation and initial setup steps']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': 'First use preparation and initial setup steps', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [242] ===
+[node] question_analyzer | q='"How to find the approval label of emission contro'
+[node] retriever | product=None sub_q=['排放控制认证标签的位置']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '排放控制认证标签的位置', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [243] ===
+[node] question_analyzer | q='"How do I use the battery conversion feature befor'
+[node] retriever | product=None sub_q=['电池转换功能的使用前提条件和准备步骤', '航行前电池转换的操作方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '电池转换功能的使用前提条件和准备步骤', 'reason': 'score_below_threshold'}, {'sub_question': '航行前电池转换的操作方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [244] ===
+[node] question_analyzer | q='"How the ship steers?"'
+[node] retriever | product=None sub_q=['转向系统结构与工作原理', '转向操作方法']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '转向系统结构与工作原理', 'reason': 'score_below_threshold'}, {'sub_question': '转向操作方法', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [245] ===
+[node] question_analyzer | q='"What should I do if face over temperature warning'
+[node] retriever | product=None sub_q=['过温警告的原因及含义', '过温警告的处理步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [246] ===
+[node] question_analyzer | q='"If I want to listen to music on my phone, how do '
+[node] retriever | product=None sub_q=['如何连接手机与音响系统（蓝牙/有线）', '如何开启和操作音响系统播放音乐']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '如何连接手机与音响系统（蓝牙/有线）', 'reason': 'score_below_threshold'}, {'sub_question': '如何开启和操作音响系统播放音乐', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [248] ===
+[node] question_analyzer | q='"How to open the battery compartment when manipula'
+[node] retriever | product=None sub_q=['电池仓的位置及打开方式']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [249] ===
+[node] question_analyzer | q='"How to install an anchor light while the boat is '
+[node] retriever | product=None sub_q=['anchor light installation requirements and location', 'installation procedure and wiring']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [247] ===
+[node] question_analyzer | q='"How do I use the storage compartments if I want t'
+[node] retriever | product=None sub_q=['储物compartment的防水/密封规格', '湿物品存放注意事项与建议']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '储物compartment的防水/密封规格', 'reason': 'score_below_threshold'}, {'sub_question': '湿物品存放注意事项与建议', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [250] ===
+[node] question_analyzer | q='"How do I use the jet wash function to clean the b'
+[node] retriever | product='jet wash' sub_q=['jet wash操作步骤', '清洗船只的注意事项与推荐设置']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': 'jet wash操作步骤', 'reason': 'score_below_threshold'}, {'sub_question': '清洗船只的注意事项与推荐设置', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [251] ===
+[node] question_analyzer | q='"How do I turn on or off the water supply button o'
+[node] retriever | product='boat' sub_q=['水源按钮的位置和功能说明', '水源按钮的开关操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [252] ===
+[node] question_analyzer | q='"How to remove the bimini top of the boat?"'
+[node] retriever | product='boat' sub_q=['Bimini top removal steps']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [254] ===
+[node] question_analyzer | q='"How to store the bimini top in the upright positi'
+[node] retriever | product='boat bimini top' sub_q=['How to fold and secure the bimini top for upright storage', 'How to attach or lock the bimini top in the upright position']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [253] ===
+[node] question_analyzer | q='"How do I install a bimini top on my boat if I wan'
+[node] retriever | product='bimini top' sub_q=['安装前的准备和零件确认', 'bimini top安装步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '安装前的准备和零件确认', 'reason': 'score_below_threshold'}, {'sub_question': 'bimini top安装步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [255] ===
+[node] question_analyzer | q='"When I am sailing, how do I check the engine oil '
+[node] retriever | product=None sub_q=['航行中检查发动机机油液位的操作步骤', '机油液位正常范围及不足时的处理措施']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [257] ===
+[node] question_analyzer | q='"How to perform anchor light switch check while sa'
+[node] retriever | product=None sub_q=['锚灯开关位置及功能说明', '锚灯开关检查步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '锚灯开关位置及功能说明', 'reason': 'score_below_threshold'}, {'sub_question': '锚灯开关检查步骤', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [256] ===
+[node] question_analyzer | q='"How can I use the bilge pump of the boat?"'
+[node] retriever | product='boat' sub_q=['舱底泵的操作步骤', '舱底泵的注意事项与维护']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '舱底泵的操作步骤', 'reason': 'score_below_threshold'}, {'sub_question': '舱底泵的注意事项与维护', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [258] ===
+[node] question_analyzer | q='"When I want to start the boat, how do I turn on t'
+[node] retriever | product='boat' sub_q=['启动前检查与准备', '发动机启动操作步骤']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
+=== [259] ===
+[node] question_analyzer | q='"How do I turn a boat while sailing?"'
+[node] retriever | product='boat' sub_q=['转向操作方法', '帆的调整与转向配合']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] sub_question_filler | failures=[{'sub_question': '转向操作方法', 'reason': 'score_below_threshold'}, {'sub_question': '帆的调整与转向配合', 'reason': 'score_below_threshold'}]
+[node] answer_merger | has_filler=False
+[node] validator | retry=0
+[node] language_translator
+
+=== [260] ===
+[node] question_analyzer | q='"How to operate the boat cross wakes and swells?"'
+[node] retriever | product='boat' sub_q=['How to cross wakes safely', 'How to navigate through swells']
+[node] answer_generator | retry=0
+[node] validator | retry=0
+[node] language_translator
+
