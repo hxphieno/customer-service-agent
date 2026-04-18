@@ -29,6 +29,7 @@ class AgentState(TypedDict):
     # Validation
     used_images: list[str]
     validation_passed: bool
+    validation_feedback: Optional[str]
     retry_count: int
 
     # Output

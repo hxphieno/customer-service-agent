@@ -1,9 +1,33 @@
+# 敏感信息
 .env
+*.env.*
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# 知识库（大文件/生成物）
 knowledge_base/qdrant_data/
 knowledge_base/docstore.json
+knowledge_base/term_product_map.json
+
+# 竞赛数据（手册原文、插图、题目）
+手册/
+KownledgeBase.zip
+question_public.csv
+result_example.csv
+
+# 运行产物
 submission_*.csv
+batch_progress*.csv
+batch_failures.csv
+validation_log.jsonl
+
+# 系统/工具
 .DS_Store
-*.egg-info/
 .superpowers/
+.claude/

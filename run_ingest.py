@@ -5,11 +5,13 @@ from src.ingest.parser import parse_all_manuals
 from src.ingest.chunker import chunk_manual
 from src.ingest.indexer import (
     get_qdrant_client, get_dense_model, get_sparse_model,
-    setup_manuals_collection, setup_policy_collection,
-    index_manual_chunks, index_policy_docs, save_docstore,
+    setup_manuals_collection, setup_policy_collection, setup_manual_policy_collection,
+    index_manual_chunks, index_policy_docs, index_manual_policy, save_docstore,
+    build_term_product_map,
 )
 
 def main():
+    terms_only = "--terms-only" in sys.argv
     print("=== 知识库构建 ===\n")
 
     print(f"[1/5] 解析手册: {MANUALS_DIR}")
@@ -17,6 +19,12 @@ def main():
     print(f"      找到 {len(parsed_manuals)} 本手册")
     if not parsed_manuals:
         print("ERROR: 未找到任何手册，检查 MANUALS_DIR"); sys.exit(1)
+
+    if terms_only:
+        print("[terms-only] 构建术语→产品映射...")
+        build_term_product_map(parsed_manuals)
+        print("\n✅ 术语映射更新完成！")
+        return
 
     print("[2/5] 切分 chunks...")
     all_parents, all_children = [], []
@@ -36,10 +44,15 @@ def main():
     sparse_model = get_sparse_model()
     setup_manuals_collection(client)
     setup_policy_collection(client)
+    setup_manual_policy_collection(client)
 
-    print("[5/5] 写入向量（首次需下载 bge-m3，约 1GB）...")
+    print("[5/6] 写入向量（首次需下载 bge-m3，约 1GB）...")
     index_manual_chunks(all_children, client, dense_model, sparse_model)
     index_policy_docs(client, dense_model)
+    index_manual_policy(parsed_manuals, client, dense_model)
+
+    print("[6/6] 构建术语→产品映射（LLM提取，一次性）...")
+    build_term_product_map(parsed_manuals)
 
     print("\n✅ 知识库构建完成！")
     print("   Qdrant: knowledge_base/qdrant_data/")

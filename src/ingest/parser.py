@@ -56,10 +56,47 @@ def parse_manual(filepath: Path) -> dict:
     }
 
 
+def parse_en_manuals(filepath: Path) -> list[dict]:
+    """解析汇总英文手册（每行一本，格式同单本手册）"""
+    results = []
+    raw_lines = filepath.read_text(encoding="utf-8").splitlines()
+    for line in raw_lines:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            data = json.loads(line)
+            text: str = data[0]
+            image_ids: list[str] = data[1]
+        except (json.JSONDecodeError, IndexError):
+            continue
+        # 用图片ID前缀作为产品名，如 Manual10_0 -> en_Manual10
+        product = "en_unknown"
+        if image_ids:
+            prefix = "_".join(image_ids[0].split("_")[:-1])
+            if prefix:
+                product = f"en_{prefix}"
+        pic_count = text.count("<PIC>")
+        pic_position_map = {i: image_ids[i] for i in range(min(pic_count, len(image_ids)))}
+        results.append({
+            "product": product,
+            "text": text,
+            "image_ids": image_ids,
+            "pic_count": pic_count,
+            "pic_position_map": pic_position_map,
+            "filepath": filepath,
+        })
+    return results
+
+
 def parse_all_manuals(manuals_dir: Path) -> list[dict]:
-    """解析目录下所有 *手册.txt 文件"""
-    return [
+    """解析目录下所有手册（中文单本 + 英文汇总）"""
+    manuals = [
         parse_manual(f)
         for f in sorted(manuals_dir.glob("*手册.txt"))
         if f.is_file() and "汇总" not in f.name
     ]
+    en_file = manuals_dir / "汇总英文手册.txt"
+    if en_file.is_file():
+        manuals.extend(parse_en_manuals(en_file))
+    return manuals

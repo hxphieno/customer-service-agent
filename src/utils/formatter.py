@@ -14,6 +14,11 @@ def format_answer(answer_text: str, image_ids: list[str]) -> str:
         - No images: plain text
         - With images: '"text with <PIC>", ["id1", "id2"]'
     """
+    # Strip all newlines to match standard answer format
+    answer_text = answer_text.replace('\n', ' ').replace('\r', ' ')
+    # Collapse multiple spaces
+    answer_text = ' '.join(answer_text.split())
+
     if not image_ids:
         return answer_text
 
