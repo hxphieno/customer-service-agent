@@ -35,8 +35,13 @@ def log_failure(qid, question, error, tb):
 
 def save_result(qid, ret):
     with _file_lock:
-        result_df = pd.DataFrame([{"id": qid, "ret": ret}])
-        result_df.to_csv(PROGRESS_FILE, mode='a', header=not os.path.exists(PROGRESS_FILE), index=False, encoding="utf-8-sig")
+        write_header = not os.path.exists(PROGRESS_FILE)
+        with open(PROGRESS_FILE, "a", newline="", encoding="utf-8-sig") as f:
+            import csv
+            w = csv.writer(f)
+            if write_header:
+                w.writerow(["id", "ret"])
+            w.writerow([qid, ret])
 
 
 def main():

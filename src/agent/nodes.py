@@ -209,13 +209,15 @@ def answer_generator_node(state: AgentState) -> dict:
 
     system = """你是产品客服助手。基于提供的手册内容和配图回答用户问题。
 
+你的回复必须是且仅是一个JSON对象，以{开头，以}结尾，不得包含任何其他文字。
+
 要求：
 1. 回答准确、完整，覆盖所有子问题
 2. 答案控制在200字以内，直接回答，不要开场白（如"关于您的问题"）
 3. 不使用markdown格式：禁止**加粗**、#标题、编号列表（1. 2. 3.）
 4. 若需配图，在文本中用 <PIC> 标记插入位置，紧跟相关文字后
 5. 从提供的图片中选择最相关的（已按相关度排序）
-6. 返回JSON格式（不要加markdown代码块）：
+6. 返回JSON格式：
 {
   "answer": "回答文本，用<PIC>标记图片位置",
   "image_ids": ["选中的图片ID列表，按<PIC>顺序"]
@@ -255,16 +257,11 @@ def answer_generator_node(state: AgentState) -> dict:
     )
 
     try:
-        # 去除可能的 markdown 代码块
-        clean_text = response_text.strip()
-        if clean_text.startswith("```"):
-            # 移除开头的 ```json 或 ```
-            clean_text = clean_text.split("\n", 1)[1] if "\n" in clean_text else clean_text
-            # 移除结尾的 ```
-            if clean_text.endswith("```"):
-                clean_text = clean_text.rsplit("```", 1)[0]
-
-        parsed = json.loads(clean_text.strip())
+        # 用正则提取最后一个 {...} block，兼容模型在 JSON 前输出多余文字的情况
+        match = re.search(r'\{.*\}', response_text, re.DOTALL)
+        if not match:
+            raise json.JSONDecodeError("no JSON found", response_text, 0)
+        parsed = json.loads(match.group())
         answer = parsed.get("answer", "")
         image_ids = parsed.get("image_ids", [])
     except json.JSONDecodeError:

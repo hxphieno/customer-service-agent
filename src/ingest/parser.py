@@ -1,6 +1,17 @@
 # src/ingest/parser.py
 import json
+import re
 from pathlib import Path
+
+_VALID_ESCAPES = set(r'"\\/bfnrtu')
+
+
+def _fix_escapes(raw: str) -> str:
+    r"""Replace invalid JSON escape sequences like \* with \\*."""
+    def replacer(m):
+        char = m.group(1)
+        return m.group(0) if char in _VALID_ESCAPES else '\\\\' + char
+    return re.sub(r'\\(.)', replacer, raw)
 
 
 def extract_product_name(filepath: Path) -> str:
@@ -14,27 +25,8 @@ def parse_manual(filepath: Path) -> dict:
     解析单本手册 .txt 文件（格式：[text, [image_ids]]）。
     Returns dict with keys: product, text, image_ids, pic_count, pic_position_map, filepath
     """
-    import re
     raw = filepath.read_text(encoding="utf-8").strip()
-    # Fix invalid escape sequences in the JSON files
-    # Strategy: Match backslash followed by invalid escape char, and double it
-    # But we need to handle both \X and \\X patterns
-    # First, protect valid escapes by temporarily replacing them
-    # Then fix all remaining backslashes, then restore valid escapes
-
-    # Simpler approach: just replace all backslashes with double backslashes,
-    # then fix the over-escaped valid ones
-    raw = raw.replace('\\', '\\\\')
-    # Now fix over-escaped valid escapes: \\\\" -> \\", \\\\\\\\ -> \\\\, etc.
-    raw = raw.replace('\\\\\\\\', '\\\\')  # \\\\ -> \\
-    raw = raw.replace('\\\\"', '\\"')      # \\" -> \"
-    raw = raw.replace('\\\\/', '\\/')      # \\/ -> \/
-    raw = raw.replace('\\\\b', '\\b')      # \\b -> \b
-    raw = raw.replace('\\\\f', '\\f')      # \\f -> \f
-    raw = raw.replace('\\\\n', '\\n')      # \\n -> \n
-    raw = raw.replace('\\\\r', '\\r')      # \\r -> \r
-    raw = raw.replace('\\\\t', '\\t')      # \\t -> \t
-    raw = raw.replace('\\\\u', '\\u')      # \\u -> \u
+    raw = _fix_escapes(raw)
 
     try:
         data = json.loads(raw)
