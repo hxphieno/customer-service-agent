@@ -12,7 +12,7 @@ from src.agent.nodes.utils import flush_node_log
 WORKERS = 5  # 并发线程数
 
 INPUT_CSV = "question_public.csv"
-PROGRESS_FILE = "batch_progress_v4.csv"
+PROGRESS_FILE = "batch_progress_v5.csv"
 FAILURE_LOG = "logs/batch_failures.csv"
 
 _file_lock = threading.Lock()

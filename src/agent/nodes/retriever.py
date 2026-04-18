@@ -9,7 +9,6 @@ def retriever_node(state: AgentState) -> dict:
     sub_questions = state["sub_questions"]
     product = state["product"]
     accumulated_context = state.get("accumulated_context", "")
-    search_failures = []
     all_chunks, all_images = [], []
     seen_pids = set()
 
@@ -23,31 +22,25 @@ def retriever_node(state: AgentState) -> dict:
         for sub_q in sub_questions:
             query = sub_q + (" " + accumulated_context if accumulated_context else "")
             chunks = hybrid_search_manuals(query, product=product)
-            good_chunks = [c for c in chunks if c.get("score", 0) > RETRIEVAL_SCORE_THRESHOLD]
-            if not good_chunks:
-                search_failures.append({"sub_question": sub_q, "reason": "score_below_threshold"})
-            for c in good_chunks:
+            for c in chunks:
                 pid = c.get("parent_id", c.get("chapter", ""))
                 if pid not in seen_pids:
                     seen_pids.add(pid)
                     all_chunks.append(c)
                     all_images.extend(c.get("image_ids", []))
-            titles = " ".join(c.get("chapter", "") for c in good_chunks)
+            titles = " ".join(c.get("chapter", "") for c in chunks)
             accumulated_context = (accumulated_context + " " + titles).strip()
     else:
         for sub_q in sub_questions:
             chunks = hybrid_search_manuals(sub_q, product=product)
-            good_chunks = [c for c in chunks if c.get("score", 0) > RETRIEVAL_SCORE_THRESHOLD]
-            if not good_chunks:
-                search_failures.append({"sub_question": sub_q, "reason": "score_below_threshold"})
-            for c in good_chunks:
+            for c in chunks:
                 pid = c.get("parent_id", c.get("chapter", ""))
                 if pid not in seen_pids:
                     seen_pids.add(pid)
                     all_chunks.append(c)
                     all_images.extend(c.get("image_ids", []))
 
-    if len(all_chunks) == 0 and search_failures:
+    if len(all_chunks) == 0:
         from src.agent.retriever import match_product_by_term, lookup_product_by_term
         combined_query = " ".join(sub_questions)
         inferred_product = match_product_by_term(combined_query)
@@ -56,22 +49,7 @@ def retriever_node(state: AgentState) -> dict:
         if inferred_product and inferred_product != product:
             for sub_q in sub_questions:
                 chunks = hybrid_search_manuals(sub_q, product=inferred_product)
-                good_chunks = [c for c in chunks if c.get("score", 0) > RETRIEVAL_SCORE_THRESHOLD]
-                for c in good_chunks:
-                    pid = c.get("parent_id", c.get("chapter", ""))
-                    if pid not in seen_pids:
-                        seen_pids.add(pid)
-                        all_chunks.append(c)
-                        all_images.extend(c.get("image_ids", []))
-
-    if len(all_chunks) == 0 and search_failures:
-        combined_query = " ".join(sub_questions)
-        keywords = extract_keywords(combined_query)
-        if keywords:
-            for kw in keywords:
-                chunks = hybrid_search_manuals(kw, product=product)
-                good_chunks = [c for c in chunks if c.get("score", 0) > RETRIEVAL_SCORE_THRESHOLD]
-                for c in good_chunks:
+                for c in chunks:
                     pid = c.get("parent_id", c.get("chapter", ""))
                     if pid not in seen_pids:
                         seen_pids.add(pid)
@@ -84,11 +62,22 @@ def retriever_node(state: AgentState) -> dict:
             seen_imgs.add(img)
             unique_images.append(img)
 
+    # detect which sub_questions got no chunks
+    search_failures = []
+    for sub_q in sub_questions:
+        chunks = hybrid_search_manuals(sub_q, product=product, top_k=1)
+        if not chunks:
+            search_failures.append({"sub_question": sub_q})
+
+    partial_retrieval = bool(search_failures) and len(all_chunks) > 0
+
+    node_log(f"[chunks] {len(all_chunks)} chunks, {len(unique_images)} images: {unique_images}")
+
     return {
         "retrieved_chunks": all_chunks,
         "candidate_images": unique_images,
         "retrieval_failed": len(all_chunks) == 0,
-        "partial_retrieval": len(search_failures) > 0 and len(all_chunks) > 0,
+        "partial_retrieval": partial_retrieval,
         "product_verified": product_verified,
         "search_failures": search_failures,
         "accumulated_context": accumulated_context,

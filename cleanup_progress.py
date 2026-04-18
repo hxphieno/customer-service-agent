@@ -2,7 +2,7 @@
 import pandas as pd
 import json
 
-PROGRESS_FILE = "batch_progress_v3.csv"
+PROGRESS_FILE = "batch_progress_v5.csv"
 
 df = pd.read_csv(PROGRESS_FILE, dtype=str)
 original_len = len(df)
@@ -46,6 +46,12 @@ df["ret"] = df["ret"].apply(fix_ret)
 
 # 再次过滤修复后仍为空的
 df = df[df["ret"].str.strip() != ""]
+
+# 过滤包含 "Sorry" 或 "抱歉" 的行（道歉/拒绝回答）
+sorry_mask = df["ret"].str.contains(r"Sorry|抱歉|检索内容|retrieved", na=False)
+sorry_count = sorry_mask.sum()
+df = df[~sorry_mask]
+print(f"含 'Sorry'/'抱歉'（已删除）: {sorry_count} 行")
 
 df.to_csv(PROGRESS_FILE, index=False, encoding="utf-8-sig")
 print(f"原始: {original_len} 行")

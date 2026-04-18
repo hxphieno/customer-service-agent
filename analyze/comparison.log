@@ -1,0 +1,36 @@
+Loading CSV files...
+Found 436 questions
+V2 has 436 answers
+V4 has 436 answers
+
+[1/436] Comparing question 1...
+Traceback (most recent call last):
+  File "/Users/funno/Documents/Competition/AgentCompetition/analyze/compare_results.py", line 185, in <module>
+    main()
+    ~~~~^^
+  File "/Users/funno/Documents/Competition/AgentCompetition/analyze/compare_results.py", line 120, in main
+    comparison = compare_answers(question_id, v2_answer, v4_answer)
+  File "/Users/funno/Documents/Competition/AgentCompetition/analyze/compare_results.py", line 65, in compare_answers
+    message = client.messages.create(
+        model="claude-opus-4-7",
+    ...<3 lines>...
+        ]
+    )
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.13/site-packages/anthropic/_utils/_utils.py", line 283, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.13/site-packages/anthropic/resources/messages/messages.py", line 1000, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/v1/messages",
+        ^^^^^^^^^^^^^^^
+    ...<30 lines>...
+        stream_cls=Stream[RawMessageStreamEvent],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.13/site-packages/anthropic/_base_client.py", line 1368, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.13/site-packages/anthropic/_base_client.py", line 1141, in request
+    raise self._make_status_error_from_response(err.response) from None
+anthropic.PermissionDeniedError: Your request was blocked.

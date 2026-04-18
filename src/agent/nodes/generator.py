@@ -30,15 +30,19 @@ def answer_generator_node(state: AgentState) -> dict:
             context_parts.append(f"[{i}] {c}")
     context = "\n\n".join(context_parts)
 
-    system = """你是一名专业的产品客服，语气亲切自然，像真人客服一样回答用户问题。
+    system = """你是专业产品客服，回答准确、清晰、简洁。
 
 你的回复必须是且仅是一个JSON对象，以{开头，以}结尾，不得包含任何其他文字。
 
-语言风格要求：
-- 【重要】回答语言必须与问题语言相同：中文问题用中文回答，英文问题用英文回答
-- 用"您好"开头（政策类问题），产品操作类问题直接给出步骤
-- 口语化、自然，避免"根据手册"、"根据产品说明"、"手册中提到"等表述
-- 不使用markdown格式：禁止**加粗**、#标题、编号列表（1. 2. 3.）
+语言要求（最高优先级）：
+- 中文问题必须用纯中文回答，禁止夹杂英文单词或英文句子
+- 英文问题必须用纯英文回答
+- 产品术语、型号等专有名词除外
+
+风格要求：
+- 直接回答问题，不用"您好"开头，不用客套语结尾
+- 避免"根据手册"、"根据产品说明"、"手册中提到"等表述
+- 不使用markdown格式：禁止**加粗**、#标题
 - 答案控制在200字以内
 
 内容要求：
@@ -79,6 +83,14 @@ def answer_generator_node(state: AgentState) -> dict:
         parsed = json.loads(match.group())
         answer = parsed.get("answer", "")
         image_ids = parsed.get("image_ids", [])
+        # 检测 answer 本身是否是 JSON（嵌套情况）
+        if answer and answer.strip().startswith("{"):
+            try:
+                inner = json.loads(answer)
+                answer = inner.get("answer", answer)
+                image_ids = inner.get("image_ids", image_ids)
+            except Exception:
+                pass
     except json.JSONDecodeError:
         # strip markdown fences and retry
         clean = re.sub(r'^```[a-z]*\n?', '', response_text.strip(), flags=re.MULTILINE)
@@ -98,6 +110,8 @@ def answer_generator_node(state: AgentState) -> dict:
             answer = answer[::-1].replace(">CIP<", "", 1)[::-1]
     elif len(image_ids) > pic_count:
         image_ids = image_ids[:pic_count]
+
+    node_log(f"[gen_images] top_images={top_images} -> answer_images={image_ids}, pic_count={pic_count}")
 
     result = {"draft_answer": answer, "used_images": image_ids}
     if feedback:
@@ -128,11 +142,11 @@ def sub_question_filler_node(state: AgentState) -> dict:
     for sq in uncovered_sqs:
         keywords = extract_keywords(sq)
         chunks = hybrid_search_manuals(sq, product=product)
-        good_chunks = [c for c in chunks if c.get("score", 0) > RETRIEVAL_SCORE_THRESHOLD]
+        good_chunks = chunks  # 不过滤，直接使用所有chunks
         if not good_chunks and keywords:
             for kw in keywords:
                 chunks = hybrid_search_manuals(kw, product=product)
-                good_chunks.extend([c for c in chunks if c.get("score", 0) > RETRIEVAL_SCORE_THRESHOLD])
+                good_chunks.extend(chunks)
 
         if good_chunks:
             context_parts = []

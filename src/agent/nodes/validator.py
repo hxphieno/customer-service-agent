@@ -83,4 +83,5 @@ def validator_node(state: AgentState) -> dict:
         return {"validation_passed": False, "validation_feedback": feedback}
 
     _write_validation_log(question_id, retry_count, draft, True, "")
+    node_log(f"[final] pass | images={used_images}, has_pic={draft.count('<PIC>')}")
     return {"validation_passed": True, "validation_feedback": None, "final_answer": draft}

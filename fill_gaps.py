@@ -1,7 +1,7 @@
 import csv
 
-src = "batch_progress_v3.csv"
-dst = "batch_progress_v3_filled.csv"
+src = "batch_progress_v5.csv"
+dst = "batch_progress_v5_filled.csv"
 
 with open(src, newline="", encoding="utf-8-sig") as f:
     rows = {int(r["id"]): r["ret"] for r in csv.DictReader(f)}

@@ -11,6 +11,9 @@ def policy_responder_node(state: AgentState) -> dict:
     manual_policy = dense_search_manual_policy(query, product=product, top_k=3)
     combined = [{"text": p["text"], "product": p["product"]} for p in manual_policy] + \
                [{"text": c} for c in chunks]
+
+    node_log(f"[policy_chunks] {len(combined)} chunks, no images (policy docs)")
+
     return {
         "retrieved_chunks": combined,
         "retrieval_failed": len(combined) == 0,
